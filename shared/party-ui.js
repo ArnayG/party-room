@@ -10,7 +10,7 @@ export function notice(message){$('notice').textContent=message;$('notice').hidd
 export function setupParty(game,render){
   let snapshot='',previousPhase='',previousRound=0;document.body.dataset.game=game;const invites=setupInvites(document,location,navigator,notice);
   const client=new PartyClient(game,room=>{
-    if(!room){$('lobby').hidden=false;$('party').hidden=true;snapshot='';previousPhase='';previousRound=0;invites.close();return;}
+    if(!room){$('lobby').hidden=false;$('party').hidden=true;snapshot='';previousPhase='';previousRound=0;invites.close();$('game-stage').replaceChildren();delete $('host-controls').dataset.signature;render(null,client);return;}
     rememberPrompts(game,room);$('lobby').hidden=true;$('party').hidden=false;$('room-code').textContent=room.code;
     const url=invites.update(room);if(url!==location.href)history.replaceState(null,'',url);
     const serialized=JSON.stringify(room);if(serialized===snapshot)return;snapshot=serialized;
