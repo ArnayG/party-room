@@ -3,7 +3,7 @@ import {el,button,scores} from '../../shared/game-tools.js';
 import {raceClock,paintRaceStatus,standings} from '../../shared/race-ui.js';
 import {sudokuPeers,sudokuConflicts,validDraft} from './rules.js';
 let latest,client,key='',board='',notes=Array(81).fill(0),selected=0,pencil=false,dirty=false,revision=0,saveTimer=null,busy=false,undoStack=[],storageKey='';
-function unlocked(){return latest?.phase==='race'&&latest.participants.includes(latest.you)&&!latest.ready.includes(latest.you)&&Date.now()/1000+latest.serverTimeOffset>=latest.startsAt&&Date.now()/1000+latest.serverTimeOffset<latest.deadline;}
+function unlocked(){return !!client?.session&&client.room?.code===latest?.code&&latest?.phase==='race'&&latest.participants.includes(latest.you)&&!latest.ready.includes(latest.you)&&Date.now()/1000+latest.serverTimeOffset>=latest.startsAt&&Date.now()/1000+latest.serverTimeOffset<latest.deadline;}
 function store(){try{localStorage.setItem(storageKey,JSON.stringify({board,notes}));}catch{}}
 function scheduleSave(){store();clearTimeout(saveTimer);saveTimer=setTimeout(save,350);}
 async function save(){if(!dirty||!unlocked())return;const currentRevision=revision,currentBoard=board;try{await client.act('board',{board:currentBoard});if(revision===currentRevision){dirty=false;if($('save-status'))$('save-status').textContent='Board saved';}}catch(e){if(latest?.phase==='race'){notice(e.message);if($('save-status'))$('save-status').textContent='Edits kept here · retrying';clearTimeout(saveTimer);saveTimer=setTimeout(save,1800);}}}
