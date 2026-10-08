@@ -1,4 +1,4 @@
-import {inviteUrl,inviteMatrix,qrSvg} from './invite-qr.js';
+import {inviteUrl,inviteMatrix,qrSvg} from './invite-qr.js?v=20261008-qr-mobile-2';
 export function setupInvites(document,location,navigator,report){
  const el=(tag,cls='',text='')=>{const n=document.createElement(tag);n.className=cls;n.textContent=text;return n;};
  const byId=id=>document.getElementById(id),sidebar=document.querySelector('.party-sidebar'),mobile=matchMedia('(max-width: 760px)');

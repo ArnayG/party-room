@@ -1,7 +1,8 @@
 PARTY ROOM — GODADDY CPANEL UPLOAD
+RELEASE: 2026-10-08 · QR invites, mobile controls, and room rejoin fixes
 
 1. In cPanel, choose PHP 8.0 or newer for your domain (MultiPHP Manager or Select PHP Version).
-2. Upload party-room-upload.zip into public_html and extract it. It contains one folder, party-room, with index.html inside.
+2. Upload the latest ZIP into public_html and extract it, overwriting the existing party-room folder and its files. The ZIP contains one folder, party-room, with index.html inside. If your live folder has another name, replace its contents with the contents of party-room; do not create a second nested party-room folder.
 3. Open https://YOUR-DOMAIN/party-room/ . You may rename the folder, or put its contents inside another subfolder. Keep every included file and directory together.
 4. Barcraft: open it and start a beat. All other games: create a room, then use another device to join with its five-character code, invite link, or QR code. Tap the QR to enlarge it for a phone camera.
 
@@ -23,3 +24,7 @@ Word Circuit and Sudoku Race support solo practice or live races with up to 16 p
 
 MOBILE PLAY
 No browser extension or app is needed to play in Chrome or Safari. Party invites collapse during play on phones; tap Party & invites to reopen the code, QR, and player list. Swipe card hands sideways. Use Wavelength’s slider or -1/+1 buttons and Sudoku’s on-screen number pad. Barcraft settings collapse above the stage; transport controls remain accessible. QR codes are generated locally and point to the same hosted game and room.
+
+UPDATING AN EXISTING SITE
+After replacing the full folder, hard-refresh your browser once (Mac: Command+Shift+R; Windows: Ctrl+Shift+R). Script and stylesheet URLs include a release version, and the included .htaccess requests revalidation for future updates. If your hosting uses a separate page/CDN cache, purge that cache after upload.
+To see the QR, open any live game and create or join a party. It appears next to the five-character code. On a phone during play, tap Party & invites to expand the panel. Barcraft is solo and has no party QR.

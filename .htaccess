@@ -1,1 +1,8 @@
 DirectoryIndex index.html
+
+# Revalidate screens and code after replacing the upload folder.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|js|css|txt)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>

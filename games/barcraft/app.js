@@ -1,6 +1,6 @@
-import {BeatEngine,tracks} from './audio.js';
-import {createRhymeChain,getWordPool,wordBankSize} from './rhymes.js';
-import {WordMemory} from './word-memory.js';
+import {BeatEngine,tracks} from './audio.js?v=20261008-qr-mobile-2';
+import {createRhymeChain,getWordPool,wordBankSize} from './rhymes.js?v=20261008-qr-mobile-2';
+import {WordMemory} from './word-memory.js?v=20261008-qr-mobile-2';
 const $=id=>document.getElementById(id),engine=new BeatEngine();
 let storage;try{storage=localStorage;}catch{storage=null;}
 const memory=WordMemory.load(storage);

@@ -1,5 +1,5 @@
-import {$,setupParty,perform,lobbyContent,roomControls,playerName} from './party-ui.js';
-import {el,button,scores} from './game-tools.js';
+import {$,setupParty,perform,lobbyContent,roomControls,playerName} from './party-ui.js?v=20261008-qr-mobile-2';
+import {el,button,scores} from './game-tools.js?v=20261008-qr-mobile-2';
 export function startJudgingGame(game){
  let latest,client,key='',selected=[],offset=0;
  const adult=game==='humanity';if(adult){document.body.classList.add('humanity');document.querySelector('.game-brand').classList.add('humanity-brand');}

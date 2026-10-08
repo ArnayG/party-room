@@ -1,5 +1,5 @@
-import {$,setupParty,perform,lobbyContent,roomControls,playerName} from '../../shared/party-ui.js';
-import {el,button,form,scores} from '../../shared/game-tools.js';
+import {$,setupParty,perform,lobbyContent,roomControls,playerName} from '../../shared/party-ui.js?v=20261008-qr-mobile-2';
+import {el,button,form,scores} from '../../shared/game-tools.js?v=20261008-qr-mobile-2';
 let key='',latest,open=false;
 function privateCard(room){const card=button('',()=>{open=!open;paintCard(room,card);},'secret-card');paintCard(room,card);return card;}
 function paintCard(room,card){card.replaceChildren();card.setAttribute('aria-expanded',String(open));card.append(el('span',open?(room.role==='imposter'?'YOU ARE THE IMPOSTER':'YOUR SECRET WORD'):'YOUR PRIVATE CARD','eyebrow'),el('strong',open?(room.role==='imposter'?'Blend in.':room.word):'Tap to peek.'),el('small',open?'Tap to hide · Keep this to yourself':`Category: ${room.category}`));}

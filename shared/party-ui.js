@@ -1,6 +1,6 @@
-import {setupInvites} from './party-invite.js';
-import {PartyClient} from './party-client.js';
-import {rememberPrompts,recentPrompts} from './prompt-memory.js';
+import {setupInvites} from './party-invite.js?v=20261008-qr-mobile-2';
+import {PartyClient} from './party-client.js?v=20261008-qr-mobile-2';
+import {rememberPrompts,recentPrompts} from './prompt-memory.js?v=20261008-qr-mobile-2';
 export const $=id=>document.getElementById(id);
 const names={wavelength:'Wavelength',imposter:'Imposter',scattergories:'Scattergories',hivemind:'Hive Mind',apples:'Apples to Apples',humanity:'Cards Against Humanity','desktop-disaster':'Desktop Disaster','word-circuit':'Word Circuit','sudoku-race':'Sudoku Race'};
 const minimums={'word-circuit':1,'sudoku-race':1,imposter:3,hivemind:3,apples:4,humanity:4};

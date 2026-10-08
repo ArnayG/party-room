@@ -8,7 +8,7 @@ Requires PHP 8.0+ and Node for checks/build only. Run `npm ci` to install develo
 
 ## Deploy
 
-See UPLOAD.txt. Upload the ZIP into public_html and extract it. All public paths are relative; no root URL, domain name, rewrite router, or external multiplayer service is assumed. The shared client locates api/room.php relative to its own module URL, including renamed/nested folders. PHP saves JSON room files outside public_html and serializes only each player's authorized view. File locks serialize room updates.
+See UPLOAD.txt. Upload the ZIP into public_html and extract it, replacing the existing folder’s contents. Script imports and stylesheet URLs have a release version to prevent mixed cached files; bump that version when changing frontend assets. The included .htaccess also requests revalidation for HTML, JavaScript, CSS, and text files when Apache mod_headers is available. All public paths are relative; no root URL, domain name, rewrite router, or external multiplayer service is assumed. The shared client locates api/room.php relative to its own module URL, including renamed/nested folders. PHP saves JSON room files outside public_html and serializes only each player's authorized view. File locks serialize room updates.
 
 Barcraft remains a standalone frontend with local audio, fonts, and artwork. The live games require PHP and writable private room storage. In person or remote voice conversation is expected; the site does not provide voice chat. This room service suits casual parties on shared hosting, not large-scale high-traffic matchmaking.
 
