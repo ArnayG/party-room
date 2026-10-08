@@ -4,7 +4,7 @@ GoDaddy cPanel party-game portal with ten games: Barcraft, cooperative Wavelengt
 
 ## Run locally
 
-Requires PHP 8.0+ and Node for checks/build only. `npm start` serves http://127.0.0.1:5174 . `npm run check` checks JavaScript and PHP syntax. `npm test` runs the game engine and HTTP/deployment tests. `npm run build` writes release/party-room/.
+Requires PHP 8.0+ and Node for checks/build only. Run `npm ci` to install development dependencies first. `npm start` serves http://127.0.0.1:5174 . `npm run check` checks JavaScript and PHP syntax. `npm test` runs the game engine and HTTP/deployment tests. `npm run build` writes release/party-room/.
 
 ## Deploy
 
@@ -13,6 +13,12 @@ See UPLOAD.txt. Upload the ZIP into public_html and extract it. All public paths
 Barcraft remains a standalone frontend with local audio, fonts, and artwork. The live games require PHP and writable private room storage. In person or remote voice conversation is expected; the site does not provide voice chat. This room service suits casual parties on shared hosting, not large-scale high-traffic matchmaking.
 
 Add game folders under games/ and register cards in games.js. Original spectrum prompts and secret-word lists are in api/game-data.php and api/prompt-bank.php. The new question and card banks are in api/new-game-data.php. Wavelength is an unofficial adaptation credited in its instructions. Music attribution is available inside Barcraft.
+
+## Mobile play and invites
+
+Every live game shows a locally generated QR code beside its party code. Tap it to enlarge, or share the invite with the phone’s native share sheet where available. QR links contain only the public room code and preserve renamed/nested hosting folders. The QR generator and its MIT license are included in shared/vendor; no QR service or account is required.
+
+On phones, the party panel collapses during play, card hands swipe horizontally, and selected cards stay visible in order. Wavelength has precise touch adjustments, answer sheets advance with the keyboard’s Enter key, and Sudoku includes a sticky number pad and selected-cell preview. Barcraft has collapsible session settings and a sticky transport. Controls account for touch, safe areas, reduced motion, and mobile text entry. Chrome and Safari need no extension to play.
 
 ## Prompt variety
 
@@ -34,7 +40,7 @@ Word Circuit uses [SCOWL 2020.12.07](https://wordlist.aspell.net/), English/Amer
 
 Card decks avoid cards still in hands and recycle when exhausted. Recent prompts and responses are remembered across games in the same browser, with finite banks eventually recycling. Hive matching review, card judge recovery, private hands and submissions, timers, scoring, role rotation, long sessions, and nested deployment are covered by tests.
 
-Tests cover private state serialization, complete sessions, timed reveal, score adjustments, queued client updates, stale responses after leaving, prompt memory, rhyme/audio behavior, and relative assets in a renamed nested deployment. Visual browser verification requires a connected browser; no browser is connected in this workspace.
+Tests cover private state serialization, complete sessions, timed reveal, score adjustments, queued client updates, stale responses after leaving, prompt memory, rhyme/audio behavior, and relative assets in a renamed nested deployment. Mobile interaction tests cover all nine invite panels, native-share fallback, card selection order and scroll preservation, answer entry, Wavelength nudges, and Sudoku touch controls. An independent decoder verifies QR images for every live game with normal, nested, and Unicode URLs. Visual browser verification requires a connected browser; no browser is connected in this workspace.
 
 ## GitHub development
 

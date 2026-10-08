@@ -72,3 +72,5 @@ renderTracks();renderPrompt();requestAnimationFrame(animate);
 $('music-credits').innerHTML=tracks.filter(t=>t.artist).map(t=>`<p>“${t.name}” by <a href="${t.source}" target="_blank" rel="noopener">${t.artist}${t.artist==='Shane Ivers'?' (silvermansound.com)':' (incompetech.com)'}</a> · CC BY 4.0</p>`).join('');
 $('dictionary-total').textContent=`${wordBankSize.toLocaleString()} rhyme targets. Recent words and rhyme sounds are remembered on this browser across sessions. Fresh words are used first; when a category runs low, its oldest words return.`;
 [...document.querySelectorAll('[data-category],[data-position],[data-level]')].forEach(el=>el.setAttribute('aria-pressed',el.classList.contains('selected')));
+
+const studioMedia=matchMedia('(max-width:760px)'),studioSettings=$('studio-settings');studioSettings.open=!studioMedia.matches;studioMedia.addEventListener('change',()=>{studioSettings.open=!studioMedia.matches;});

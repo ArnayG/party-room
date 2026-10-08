@@ -1,3 +1,4 @@
+import {setupInvites} from './party-invite.js';
 import {PartyClient} from './party-client.js';
 import {rememberPrompts,recentPrompts} from './prompt-memory.js';
 export const $=id=>document.getElementById(id);
@@ -7,17 +8,17 @@ const colors=['#c8b7fb','#edb396','#b4c7b5','#a9cadd','#ddafd0','#d7c68e'];
 export function playerName(room,id){return room.players.find(p=>p.id===id)?.name||'A player';}
 export function notice(message){$('notice').textContent=message;$('notice').hidden=!message;}
 export function setupParty(game,render){
-  let snapshot='';
+  let snapshot='',previousPhase='',previousRound=0;document.body.dataset.game=game;const invites=setupInvites(document,location,navigator,notice);
   const client=new PartyClient(game,room=>{
-    if(!room){$('lobby').hidden=false;$('party').hidden=true;snapshot='';return;}
+    if(!room){$('lobby').hidden=false;$('party').hidden=true;snapshot='';previousPhase='';previousRound=0;invites.close();return;}
     rememberPrompts(game,room);$('lobby').hidden=true;$('party').hidden=false;$('room-code').textContent=room.code;
-    const url=new URL(location.href);url.searchParams.set('room',room.code);$('share-link').value=url.href;if(url.href!==location.href)history.replaceState(null,'',url);
+    const url=invites.update(room);if(url!==location.href)history.replaceState(null,'',url);
     const serialized=JSON.stringify(room);if(serialized===snapshot)return;snapshot=serialized;
     $('player-count').textContent=`${room.players.length} / 16 players`;
     $('players').replaceChildren(...room.players.map((p,index)=>{
       const row=document.createElement('div');row.className='player-row';const avatar=document.createElement('span');avatar.className='avatar';avatar.style.background=colors[index%colors.length];avatar.textContent=p.name.charAt(0).toUpperCase();
       const label=document.createElement('span');label.className='player-name';label.textContent=p.name+(p.id===room.you?' (you)':'');const status=document.createElement('small');status.textContent=p.id===room.host?'Host':(!p.online?'Away':room.participants.length&&!room.participants.includes(p.id)?'Next round':'Here');row.append(avatar,label,status);return row;
-    }));render(room,client);
+    }));render(room,client);if(matchMedia('(max-width:760px)').matches&&room.phase!=='lobby'&&((previousPhase==='lobby')||(previousRound&&room.round!==previousRound))){$('game-stage').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'});}previousPhase=room.phase;previousRound=room.round;
   },status=>{$('connection').textContent=status;$('connection').classList.toggle('offline',status!=='Live');});
   const enter=async(action,form)=>{notice('');const button=form.querySelector('button');button.disabled=true;try{await client.enter(action,{name:$(action==='create'?'create-name':'join-name').value,code:$('join-code').value.toUpperCase()});}catch(error){notice(error.message);}finally{button.disabled=false;}};
   $('create-form').addEventListener('submit',event=>{event.preventDefault();enter('create',event.currentTarget);});

@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#15131d"><title>Barcraft — Find your flow</title><link rel="stylesheet" href="style.css"></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#15131d"><title>Barcraft — Find your flow</title><link rel="stylesheet" href="style.css"></head>
 <body>
 <header class="topbar"><a href="./" class="brand" aria-label="Barcraft home"><span class="brand-icon">▥</span>barcraft<span class="brand-dot">.</span></a><a class="portal-return" href="../../" aria-label="Back to Party Room">← All games</a><button class="help-button" id="help">How to play <span>?</span></button></header>
 <main class="workspace">
-<aside class="settings"><div class="section-heading"><h2>Your session</h2><span class="small-icon">☷</span></div><p class="muted intro">Set the rules. Make them your own.</p>
+<aside class="settings"><details id="studio-settings" open><summary class="studio-settings-toggle">Session settings <span aria-hidden="true">⌄</span></summary><div class="settings-body"><div class="section-heading"><h2>Your session</h2><span class="small-icon">☷</span></div><p class="muted intro">Set the rules. Make them your own.</p>
 <section><label class="field-label" for="mode">Practice mode</label><select id="mode"><option value="16">16-bar challenge</option><option value="32">32-bar challenge</option><option value="0">Endless freestyle</option></select></section>
 <section><div class="label-row"><span class="field-label">Word categories</span><span id="category-count">3 selected</span></div><div class="category-grid" id="categories"><button data-category="Everyday" class="selected">☕ Everyday</button><button data-category="Culture" class="selected">✦ Culture</button><button data-category="Nature" class="selected">❋ Nature</button><button data-category="Feelings">♡ Feelings</button><button data-category="Street">▦ Street</button><button data-category="Wildcard">⚡ Wildcard</button></div></section>
 <section><span class="field-label">Land the word</span><div class="placement" id="placements"><button data-position="beginning"><span>↤</span>Beginning<small>Beat 1</small></button><button data-position="middle"><span>↔</span>Middle<small>Beat 3</small></button><button data-position="end" class="selected"><span>↦</span>End<small>Beat 4</small></button></div><p class="field-note">Select a few to switch it up each bar.</p></section>
@@ -14,7 +14,7 @@
 <div class="toggle-row"><span>Count me in<small>Four beats before you start</small></span><button class="toggle on" id="countin" role="switch" aria-checked="true" aria-label="Count me in"></button></div>
 <div class="toggle-row"><span>Metronome<small>A click on every beat</small></span><button class="toggle" id="metronome" role="switch" aria-checked="false" aria-label="Metronome"></button></div>
 <div class="sidebar-bottom"><span class="headphones">♬</span><p>Headphones on.<br>World off. Words out.</p></div>
-</aside>
+</div></details></aside>
 <div class="main-content"><div class="page-heading"><div><h1>Find your flow.</h1><p>Catch a beat. Chase a word. See where it takes you.</p></div><span class="practice-badge"><i></i> Freestyle studio</span></div>
 <section class="stage" aria-label="Freestyle stage"><div class="stage-top"><span class="live-status"><i id="status-dot"></i><span id="status">Ready when you are</span></span><span class="bar-counter">Bar <b id="bar">01</b> <span id="bar-total">/ 16</span></span></div>
 <div class="prompt-area"><div class="current-prompt"><div class="prompt-tag" id="prompt-category">Everyday</div><div class="word-window"><div class="prompt-word" id="word">midnight</div></div><div class="target-caption"><span class="target-dot"></span><span id="target">Land it on beat 4</span><span class="note-pill" id="note">♩</span></div><div class="rhyme-info" id="rhyme-info"></div></div><div class="future-prompts"><div class="future-heading"><span>Your next three bars</span><button id="shuffle" title="Shuffle words (R)" aria-label="Shuffle words">⤨</button></div><div class="future-window"><div id="queue"></div></div></div></div>
