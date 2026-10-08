@@ -1,0 +1,41 @@
+# Party Room
+
+GoDaddy cPanel party-game portal with ten games: Barcraft, cooperative Wavelength, Imposter, Scattergories, Hive Mind, Apples to Apples, Cards Against Humanity, Desktop Disaster, Word Circuit, and Sudoku Race. All nine live room games use the same room system. Live games support 5-character codes, private per-player views, up to 16 players, reconnection in the same tab, and host handoff after 90 seconds away. Wavelength has eight rounds with median group guesses; Imposter has five rounds with private roles, locked votes, and a final word guess. Scattergories has six two-minute rounds with twelve categories, private autosaved sheets, automatic letter/duplicate checks, and host review.
+
+## Run locally
+
+Requires PHP 8.0+ and Node for checks/build only. `npm start` serves http://127.0.0.1:5174 . `npm run check` checks JavaScript and PHP syntax. `npm test` runs the game engine and HTTP/deployment tests. `npm run build` writes release/party-room/.
+
+## Deploy
+
+See UPLOAD.txt. Upload the ZIP into public_html and extract it. All public paths are relative; no root URL, domain name, rewrite router, or external multiplayer service is assumed. The shared client locates api/room.php relative to its own module URL, including renamed/nested folders. PHP saves JSON room files outside public_html and serializes only each player's authorized view. File locks serialize room updates.
+
+Barcraft remains a standalone frontend with local audio, fonts, and artwork. The live games require PHP and writable private room storage. In person or remote voice conversation is expected; the site does not provide voice chat. This room service suits casual parties on shared hosting, not large-scale high-traffic matchmaking.
+
+Add game folders under games/ and register cards in games.js. Original spectrum prompts and secret-word lists are in api/game-data.php and api/prompt-bank.php. The new question and card banks are in api/new-game-data.php. Wavelength is an unofficial adaptation credited in its instructions. Music attribution is available inside Barcraft.
+
+## Prompt variety
+
+Barcraft has 3,003 distinct prompts in 111 sound families; Wavelength has 325 spectra; Imposter has 1,510 distinct words in six categories; Scattergories has 451 categories. Hive Mind has 697 questions. Apples has 307 adjective cards and 1,828 response cards. Cards Against Humanity has 240 black prompts (including 60 Pick 2 prompts) and 580 white responses. Desktop Disaster has five randomized mission types and 110 trap messages. Word Circuit has 5,400 verified pairs and a 16,604-word local dictionary. Sudoku Race has 450 unique-solution base puzzles, with randomized digits, row/column permutations, and transposition. The nine live games keep a recent prompt history in localStorage for each browser. A host sends their history when starting a new game, avoiding recent content across sessions. Round decks also avoid repeats and Scattergories rotates letters. The finite banks eventually recycle old content; clearing storage or using another browser resets cross-session history.
+
+## New games and rule adaptations
+
+The card games are unofficial adaptations with original decks; they do not reproduce the published card sets. Links to publisher rules are included in their instructions. Players may interpret funny comparisons freely, as with the tabletop games.
+
+- Hive Mind: three or more players; choose one of three questions or write a custom one, answer with two to five items in two minutes, and earn one point per answer plus points for matching other players. Host review can combine synonymous answers. The lowest distinct score groups move down the six- or eight-level hive; a star also moves the highest scorers up. Once someone exits, the remaining players win together. Digital die faces are 1, 1, 2, 2, 3, and 1-star; this distribution is an adaptation. There is no fixed round limit.
+- Apples to Apples: four or more players, seven-card private hands, a rotating judge, anonymous responses to an adjective, one winner per round, and hand replenishment. The winning target follows the published four-to-eight-player targets; larger groups use four points.
+- Cards Against Humanity: four or more players, ten-card private hands, a rotating Card Czar, anonymous judging, one point per winning play, and ordered two-card plays for Pick 2. Choose a point target or open-ended play. The first Czar is the host and optional gambling is omitted. The original deck includes adult humor; the portal labels it accordingly.
+- Desktop Disaster: two or more players; everyone gets two turns as the active player. Complete a four-step flight, file, email, calendar, or shopping mission in 90 seconds. Other players have secret popup, notification, error, or moving-button controls. A seen distraction earns one point (up to four per saboteur per round); taking its bait earns two and removes four seconds. Error traps also move the workflow back one step. Safe dismissal earns no trap points. Finishing earns ten points plus a time bonus; timing out gives each saboteur three points. Deployment has a seven-second cooldown, a ten-gadget limit, and at most three live traps.
+
+- Word Circuit: solo or up to 16 players; warm-up, classic, and expert pairs of four to six letters. Change exactly one letter per step, with every word checked in the local game dictionary on the server and in the browser. All 5,400 prompts have a verified shortest path. Three-minute rounds begin after a five-second countdown. Your shortest completed route stays saved while you improve it. A shortest solution earns 12 points, minus two per extra change and two per hint (minimum one point for a solution). Three hints maximum; routes stay private until reveal.
+- Sudoku Race: solo or up to 16 players; everyone receives the same transformed grid and gets a five-second countdown. Easy/medium/hard describe clue densities of 42/34/28, with 10/15/20-minute limits. Every base puzzle is independently checked to have exactly one solution. Keyboard and touch controls, private pencil notes, undo, conflict highlighting, autosave, and reconnect recovery are included. A submitted board must exactly match the unique solution. Rankings use elapsed server time plus 30 seconds per hint; up to three hints reveal selected cells. Solvers earn 10 points plus placement bonuses of 6/4/2. The race continues for others until everyone finishes/passes, time expires, or the host ends it. Choose 1/3/5/10 rounds.
+
+Word Circuit uses [SCOWL 2020.12.07](https://wordlist.aspell.net/), English/American/British word lists through size 60, filtered to lowercase ASCII words of 3–6 letters and a small explicit-content exclusion. Endpoint words come from lists through size 35. Names, spaces, punctuation, and accented forms are excluded. Inflections are included; this finite dictionary does not contain every English word. The required source license is shipped in api/WORDLIST-LICENSE.txt. To rebuild puzzle banks, run `python3 tools/generate-puzzles.py` (Python 3.9+); hosting does not need Python. Tests independently verify every ladder’s optimal distance and every Sudoku’s uniqueness.
+
+Card decks avoid cards still in hands and recycle when exhausted. Recent prompts and responses are remembered across games in the same browser, with finite banks eventually recycling. Hive matching review, card judge recovery, private hands and submissions, timers, scoring, role rotation, long sessions, and nested deployment are covered by tests.
+
+Tests cover private state serialization, complete sessions, timed reveal, score adjustments, queued client updates, stale responses after leaving, prompt memory, rhyme/audio behavior, and relative assets in a renamed nested deployment. Visual browser verification requires a connected browser; no browser is connected in this workspace.
+
+## GitHub development
+
+The public repository is https://github.com/ArnayG/party-room . Source, local audio, dictionary attribution, puzzle generation, and tests are tracked. Generated release folders, room storage, credentials, and ZIP files are excluded. Run `npm run check` and `npm test` before committing, then commit and push to main. GitHub Actions repeats syntax and game checks on pushes and pull requests and provides a single-folder upload ZIP as a workflow artifact.

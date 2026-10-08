@@ -1,0 +1,22 @@
+PARTY ROOM — GODADDY CPANEL UPLOAD
+
+1. In cPanel, choose PHP 8.0 or newer for your domain (MultiPHP Manager or Select PHP Version).
+2. Upload party-room-upload.zip into public_html and extract it. It contains one folder, party-room, with index.html inside.
+3. Open https://YOUR-DOMAIN/party-room/ . You may rename the folder, or put its contents inside another subfolder. Keep every included file and directory together.
+4. Barcraft: open it and start a beat. All other games: create a room, then use another device to join with its five-character code or invite link.
+
+No Node server, build step, database, or external multiplayer account is required on GoDaddy. The nine live games use api/room.php on your hosting account. The portal and game screens use HTML, CSS, and JavaScript with relative URLs. Direct game URLs and invite links work from subfolders without rewrite rules.
+
+Room storage is created automatically in party-room-data next to public_html, outside the public website. If PHP cannot create it, use cPanel File Manager to create party-room-data in your account home (next to public_html), with permissions 0700 and ownership matching your hosting account. PHP needs read/write access there. Keep this folder outside public_html. Rooms expire after six hours without activity.
+
+Use your hosted HTTPS URL. Opening index.html by double-clicking or using hosting that does not execute PHP will not support live parties. Keep game tabs open while playing. Audio starts after a click. Voice chat is not built in: talk together or use your usual call.
+
+To add future games: add their folder under games/, then add an entry in games.js. Paths are relative to this portal folder.
+
+PROMPT VARIETY
+Barcraft: 3,003 unique words and short phrases across 111 rhyme families. Wavelength: 325 spectra. Imposter: 1,510 distinct secret words across six categories. Scattergories: 451 categories with twelve per round. Hive Mind: 697 questions. Apples to Apples: 307 adjective cards and 1,828 responses. Cards Against Humanity: 240 prompts (60 Pick 2) and 580 responses. Desktop Disaster: five randomized task types and 110 trap messages. Word Circuit: 5,400 solvable pairs, 16,604-word dictionary, and three difficulties. Sudoku Race: 450 unique-solution puzzles plus randomized layouts, three difficulties, and private pencil notes. The card decks are original, unofficial adaptations; publisher rule links and digital rule adjustments are in the game instructions. Recently shown prompts are saved in your browser and passed to new games when you host. Clearing browser storage resets that history. These are finite banks; older prompts are recycled when needed.
+
+NEW GAMES
+Hive Mind needs at least three players; Apples to Apples and Cards Against Humanity need four. Desktop Disaster needs two. Hands, answers, roles, and sabotage channels are private on each device. Cards Against Humanity contains adult humor. Desktop Disaster uses a simulated desktop; all tasks and messages stay inside the game.
+
+Word Circuit and Sudoku Race support solo practice or live races with up to 16 players. All dictionary checks run locally on your PHP host; no dictionary account, API key, Python, or external service is needed. Sudoku solutions stay on the server until reveal. Select the difficulty and round count in the lobby before starting.

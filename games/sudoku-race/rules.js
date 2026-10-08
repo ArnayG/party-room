@@ -1,0 +1,3 @@
+export function sudokuPeers(index){const row=Math.floor(index/9),col=index%9,boxRow=Math.floor(row/3)*3,boxCol=Math.floor(col/3)*3;const peers=new Set();for(let i=0;i<9;i++){peers.add(row*9+i);peers.add(i*9+col);peers.add((boxRow+Math.floor(i/3))*9+boxCol+i%3);}peers.delete(index);return peers;}
+export function sudokuConflicts(board){const conflicts=new Set();for(let i=0;i<81;i++)if(board[i]!=='0')for(const p of sudokuPeers(i))if(board[i]===board[p]){conflicts.add(i);conflicts.add(p);}return conflicts;}
+export function validDraft(board,givens){return typeof board==='string'&&/^[0-9]{81}$/.test(board)&&[...givens].every((v,i)=>v==='0'||v===board[i]);}

@@ -1,0 +1,27 @@
+// Add future games here. Paths are relative to the portal's index.html.
+// Each game lives in games/<id>/ and has its own index.html.
+export const games = [
+  {
+    id: 'barcraft',
+    title: 'Barcraft',
+    subtitle: 'Find your flow.',
+    description: 'Catch a beat and turn word prompts into your next great bar. Pass the mic, chase a rhyme, and see who finds their flow.',
+    category: 'Music & wordplay',
+    players: 'Solo or take turns',
+    duration: '2–5 min per round',
+    path: 'games/barcraft/',
+    artwork: 'art/barcraft.svg',
+    color: '#c8b7fb',
+    features: ['Eight beats', 'Rhyme chains', 'Freestyle'],
+    available: true
+  },
+  {id:'wavelength',title:'Wavelength',subtitle:'Get on the same wavelength.',description:'One private target. One perfect clue. Move your dial, talk it out, and see how close the room can get.',category:'Clues & intuition',players:'2–16 players · Online rooms',duration:'15–25 min',path:'games/wavelength/',artwork:'art/wavelength.svg',color:'#edb396',features:['Private targets','Group dial','Five-character code'],available:true},
+  {id:'imposter',title:'Imposter',subtitle:'Someone is playing along.',description:'Everyone knows the secret word. Except one of you. Trade subtle clues, find the bluff, and vote before they figure it out.',category:'Bluffing & deduction',players:'3–16 players · Online rooms',duration:'10–20 min',path:'games/imposter/',artwork:'art/imposter.svg',color:'#b4c7b5',features:['Secret roles','Private votes','Five-character code'],available:true},
+  {id:'scattergories',title:'Scattergories',subtitle:'Beat the clock. Be original.',description:'One letter, twelve categories, two minutes. Find answers nobody else picks, then compare your lists and settle the score.',category:'Words & quick thinking',players:'2–16 players · Online rooms',duration:'15–20 min',path:'games/scattergories/',artwork:'art/scattergories.svg',color:'#c8b7fb',features:['451 categories','Private answer sheets','Live scoring'],available:true},
+  {id:'hivemind',title:'Hive Mind',subtitle:'Think like your people.',description:'Choose a question, write your answers, and match the room. The least aligned groups move toward the edge of the hive.',category:'Matching & intuition',players:'3–16 players · Online rooms',duration:'20–45 min',path:'games/hivemind/',artwork:'art/hivemind.svg',color:'#e2c888',features:['Survival board','697 questions','Custom questions'],available:true},
+  {id:'apples',title:'Apples to Apples',subtitle:'Make the perfect comparison.',description:'A green adjective. Seven red cards. Find the comparison your judge will love, from clever to delightfully ridiculous.',category:'Comparisons & judging',players:'4–16 players · Online rooms',duration:'20–35 min',path:'games/apples/',artwork:'art/apples.svg',color:'#b4c7b5',features:['Private hands','Original large deck','Rotating judge'],available:true},
+  {id:'humanity',title:'Cards Against Humanity',subtitle:'Make the room lose it.',description:'Fill a questionable prompt with an even more questionable response. Play in secret, then let the Card Czar choose the funniest.',category:'Adult humor & judging',players:'4–16 players · Online rooms',duration:'15–45 min',path:'games/humanity/',artwork:'art/humanity.svg',color:'#c8b7fb',features:['Original adult deck','Pick 2 combinations','Free play'],available:true},
+  {id:'word-circuit',title:'Word Circuit',subtitle:'One letter changes everything.',description:'Connect two words, one letter at a time. Every step is verified. Find a route, then make it shorter before the clock runs out.',category:'Logic & wordplay',players:'1–16 players · Online rooms',duration:'3 min per round',path:'games/word-circuit/',artwork:'art/word-circuit.svg',color:'#b4c7b5',features:['5,400 solvable pairs','16,604-word dictionary','Solo or race'],available:true},
+  {id:'sudoku-race',title:'Sudoku Race',subtitle:'Same grid. First to finish.',description:'Race your friends through the same unique-solution Sudoku. Private grids, pencil notes, live progress, and three levels of challenge.',category:'Logic & numbers',players:'1–16 players · Online rooms',duration:'10–20 min per round',path:'games/sudoku-race/',artwork:'art/sudoku-race.svg',color:'#a9cadd',features:['450 unique puzzles','Pencil notes','Solo or race'],available:true},
+  {id:'desktop-disaster',title:'Desktop Disaster',subtitle:'Just one simple task.',description:'Finish a task on a fake desktop while your friends deploy popups, errors, notifications, and slippery buttons. Beat the clock. Survive the clicks.',category:'Sabotage & chaos',players:'2–16 players · Online rooms',duration:'15–30 min',path:'games/desktop-disaster/',artwork:'art/desktop-disaster.svg',color:'#a9cadd',features:['Five task types','Secret gadget channels','Live traps'],available:true}
+];

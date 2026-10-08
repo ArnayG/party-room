@@ -1,0 +1,9 @@
+.DS_Store
+node_modules/
+release/
+*.zip
+.env
+.env.*
+!.env.example
+party-room-data/
+*.log

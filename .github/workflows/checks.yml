@@ -1,0 +1,27 @@
+name: Check and package Party Room
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          coverage: none
+      - run: npm run check
+      - run: npm test
+      - name: Package the GoDaddy upload
+        run: cd release && zip -r party-room-upload.zip party-room
+      - uses: actions/upload-artifact@v4
+        with:
+          name: godaddy-upload
+          path: release/party-room-upload.zip

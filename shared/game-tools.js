@@ -1,0 +1,4 @@
+export function el(tag,text='',className=''){const node=document.createElement(tag);node.textContent=text;node.className=className;return node;}
+export function button(text,action,className='primary'){const node=el('button',text,className);node.addEventListener('click',action);return node;}
+export function form(label,maximum,submit){const node=el('form','','clue-form'),input=el('input');input.type='text';input.required=true;input.maxLength=maximum;input.placeholder=label;input.setAttribute('aria-label',label);node.append(input,button('Send clue',()=>{}));node.addEventListener('submit',event=>{event.preventDefault();submit(input.value);});return node;}
+export function scores(room){const list=el('div','','scoreboard');for(const player of [...room.players].sort((a,b)=>b.score-a.score)){const row=el('div','','score-row');row.append(el('span',player.name),el('strong',String(player.score)));list.append(row);}return list;}
