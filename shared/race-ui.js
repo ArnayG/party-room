@@ -1,5 +1,5 @@
-import {$,playerName} from './party-ui.js?v=20261008-qr-mobile-2';
-import {el} from './game-tools.js?v=20261008-qr-mobile-2';
+import {$,playerName} from './party-ui.js?v=20261008-deduction-1';
+import {el} from './game-tools.js?v=20261008-deduction-1';
 export function raceStatus(room){const panel=el('div','','race-status');for(const p of room.progress||[]){const row=el('div','','racer'),status=p.done?(p.solved?'Finished':'Locked'):p.solved?'Route found':'Racing';row.append(el('span',playerName(room,p.player)),el('span',status));if(room.game==='sudoku-race'){const bar=el('progress');bar.max=81;bar.value=p.filled;bar.setAttribute('aria-label',`${playerName(room,p.player)}: ${p.filled} cells filled`);row.append(bar);}panel.append(row);}return panel;}
 export function paintRaceStatus(room){const panel=$('race-players');if(panel)panel.replaceChildren(raceStatus(room));}
 export function raceClock(room){const time=$('race-clock');if(!time)return;const now=Date.now()/1000+(room.serverTimeOffset||0),countdown=Math.ceil(room.startsAt-now),left=Math.max(0,Math.ceil(room.deadline-now));time.textContent=countdown>0?`Starts in ${countdown}`:`${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}`;time.classList.toggle('urgent',countdown<=0&&left<30);}

@@ -1,4 +1,4 @@
-import qrcode from './vendor/qrcode.js?v=20261008-qr-mobile-2';
+import qrcode from './vendor/qrcode.js?v=20261008-deduction-1';
 export function inviteUrl(href,code){const url=new URL(href);if(!/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{5}$/.test(code))throw new Error('Invalid party code.');url.search='';url.hash='';url.searchParams.set('room',code);return url.href;}
 export function inviteMatrix(url){const qr=qrcode(0,'M');qr.addData(url,'Byte');qr.make();return Array.from({length:qr.getModuleCount()},(_,row)=>Array.from({length:qr.getModuleCount()},(_,col)=>qr.isDark(row,col)));}
 export function qrSvg(matrix){const size=matrix.length,extent=size+8;let path='';for(let r=0;r<size;r++)for(let c=0;c<size;c++)if(matrix[r][c])path+=`M${c+4},${r+4}h1v1h-1z`;return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${extent} ${extent}" shape-rendering="crispEdges" aria-hidden="true"><rect width="${extent}" height="${extent}" fill="#fff"/><path d="${path}" fill="#000"/></svg>`;}

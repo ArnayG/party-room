@@ -1,5 +1,5 @@
-import {$,setupParty,perform,lobbyContent,roomControls,playerName} from '../../shared/party-ui.js?v=20261008-qr-mobile-2';
-import {el,button,form} from '../../shared/game-tools.js?v=20261008-qr-mobile-2';
+import {$,setupParty,perform,lobbyContent,roomControls,playerName} from '../../shared/party-ui.js?v=20261008-deduction-1';
+import {el,button,form} from '../../shared/game-tools.js?v=20261008-deduction-1';
 let key='',latest,client,dragging=false,localGuess=50;
 const point=(v,r=220)=>{const a=Math.PI*(1-v/100);return [300+Math.cos(a)*r,260-Math.sin(a)*r];};
 function dial(room){const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox','0 0 600 290');svg.setAttribute('class','dial');svg.setAttribute('role','img');svg.setAttribute('aria-label',`Spectrum dial. Group guess ${Math.round(room.groupGuess)} out of 100.`);

@@ -1,4 +1,4 @@
-import {games} from './games.js?v=20261008-qr-mobile-2';
+import {games} from './games.js?v=20261008-deduction-1';
 const $=id=>document.getElementById(id);
 const readyGames=games.filter(game=>game.available);
 function tag(text,className=''){const el=document.createElement('span');el.className=className;el.textContent=text;return el;}

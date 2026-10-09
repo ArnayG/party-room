@@ -16,7 +16,7 @@ if(!is_writable($data))party_reply(['error'=>'Hosting cannot write room storage.
 $handle=null;
 try{
     if($action==='create'){
-        $game=(string)($input['game']??'');party_require(in_array($game,['wavelength','imposter','scattergories','hivemind','apples','humanity','desktop-disaster','word-circuit','sudoku-race'],true),'Choose a valid game.',400);$player=party_player((string)($input['name']??''));
+        $game=(string)($input['game']??'');party_require(in_array($game,['wavelength','imposter','scattergories','hivemind','apples','humanity','desktop-disaster','word-circuit','sudoku-race','rulebreakers','alien-dictionary','question-quest'],true),'Choose a valid game.',400);$player=party_player((string)($input['name']??''));
         $alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
         for($attempt=0;$attempt<15;$attempt++){$code='';for($i=0;$i<5;$i++)$code.=$alphabet[random_int(0,strlen($alphabet)-1)];$file=$data.'/'.$code.'.json';$handle=@fopen($file,'x+');if($handle)break;}
         party_require((bool)$handle,'Rooms are busy. Try again.',503);flock($handle,LOCK_EX);

@@ -3,6 +3,7 @@ require_once __DIR__ . '/game-data.php';
 require_once __DIR__.'/new-games.php';
 require_once __DIR__.'/disaster.php';
 require_once __DIR__.'/puzzle-games.php';
+require_once __DIR__.'/deduction-games.php';
 function party_require(bool $ok, string $message, int $status=409): void { if (!$ok) throw new RuntimeException($message,$status); }
 function party_name($value): string { $text=trim((string)$value); party_require($text!=='' && strlen($text)<=60,'Choose a name of 1–24 characters.',400); if (function_exists('mb_substr')) return mb_substr($text,0,24); return substr($text,0,24); }
 function party_player(string $name): array { return ['id'=>bin2hex(random_bytes(6)),'token'=>bin2hex(random_bytes(24)),'name'=>party_name($name),'seen'=>time(),'left'=>false,'score'=>0]; }
@@ -15,6 +16,7 @@ function party_points(float $guess,float $target): int { $distance=abs($guess-$t
 function party_new_round(array &$room): void {
     $ids=party_ids($room);party_require(count($ids)>=party_minimum($room['game']),'Wait for more players to join or reconnect.');
     $room['round']++;$room['participants']=$ids;$room['clues']=[];$room['votes']=[];$room['guesses']=[];$room['result']=null;
+    if(party_deduction_game($room['game'])){party_deduction_round($room);return;}
     if(party_puzzle_game($room['game'])){party_puzzle_round($room);return;}
     if(party_extra_game($room['game'])){party_extra_round($room,$ids);return;}
     if($room['game']==='wavelength'){
@@ -60,6 +62,7 @@ function party_apply(array &$room,string $id,string $action,array $input): void 
         foreach(array_slice($recent,-intdiv(count($spectrumDeck)*3,4)) as $key){$index=array_search($key,$spectrumKeys,true);if($index!==false)$room['usedSpectrums'][]=$index;}
         $allWords=party_words();$categoryWords=$category==='Mixed'?array_merge(...array_values($allWords)):$allWords[$category];$room['usedWords']=array_slice(array_values(array_intersect($recent,$categoryWords)),-intdiv(count($categoryWords)*3,4));
         $room['usedCategories']=array_slice(array_values(array_intersect($recent,party_scatter_categories())),-intdiv(count(party_scatter_categories())*3,4));$room['usedLetters']=$room['usedLetters']??[];
+        if(party_deduction_game($room['game']))party_deduction_reset($room,$input,$recent);
         if(party_puzzle_game($room['game']))party_puzzle_reset($room,$input,$recent);
         if(party_extra_game($room['game']))party_extra_reset($room,$input,$recent);
         foreach($room['players'] as &$player)$player['score']=0;unset($player);party_new_round($room);return;
@@ -76,6 +79,7 @@ function party_apply(array &$room,string $id,string $action,array $input): void 
         $room['phase']='reveal';$room['result']=['skipped'=>true,'points'=>0,'reason'=>'The host skipped this round.'];return;
     }
     party_require(in_array($id,$room['participants'],true)||($host&&in_array($action,['review','merge','take_judge','finish','end_race'],true)),'You’ll join in the next round.',403);
+    if(party_deduction_game($room['game'])){party_deduction_action($room,$id,$action,$input);return;}
     if(party_puzzle_game($room['game'])){party_puzzle_action($room,$id,$action,$input);return;}
     if(party_extra_game($room['game'])){party_extra_action($room,$id,$action,$input);return;}
     if($room['game']==='wavelength'){
@@ -161,6 +165,7 @@ function party_view(array $room,string $id): array {
         // All answer sheets are included only after the round is locked.
         if($room['phase']==='reveal')$public['answers']=$room['answers']??[];
     }
+    if(party_deduction_game($room['game']))$public=array_merge($public,party_deduction_view($room,$id));
     if(party_puzzle_game($room['game']))$public=array_merge($public,party_puzzle_view($room,$id));
     if(party_extra_game($room['game']))$public=array_merge($public,party_extra_view($room,$id));
     return $public;
@@ -184,6 +189,7 @@ function party_scatter_reveal(array &$room): void {
 }
 function party_tick(array &$room): void {
     party_extra_tick($room);
+    if(party_deduction_game($room['game'])&&$room['phase']==='deducing'&&microtime(true)>=$room['deadline']){party_deduction_reveal($room);$room['version']++;}
     if(party_puzzle_game($room['game'])&&$room['phase']==='race'&&microtime(true)>=$room['deadline']){party_puzzle_reveal($room);$room['version']++;}
     if($room['game']==='scattergories'&&$room['phase']==='writing'&&time()>=$room['deadline']){party_scatter_reveal($room);$room['version']++;}
 }

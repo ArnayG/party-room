@@ -1,0 +1,61 @@
+"""Generate distinct, usable word rules from the local licensed dictionary."""
+from pathlib import Path
+import random,json,base64,hashlib
+root=Path(__file__).resolve().parents[1]
+words=(root/'api/word-circuit-words.txt').read_text().split()
+# Keep party examples away from explicit vocabulary.
+blocked=set('arse arses anal anus butt boobs boob cock cocks cum cums cunt cunts dick dicks dildo fuck fucks fucky horny penis porn pussy sex sexy shit shits slut sluts tit tits twat whore'.split())
+words=[w for w in words if w not in blocked]
+allmask=(1<<len(words))-1
+atoms=[];known=set()
+def add(kind,arg,text,predicate):
+ mask=sum(1<<i for i,w in enumerate(words) if predicate(w));count=bin(mask).count('1')
+ if count<32 or len(words)-count<32 or mask in known:return
+ known.add(mask);atoms.append({'id':f'a{len(atoms)}','kind':kind,'arg':arg,'text':text,'mask':base64.b64encode(mask.to_bytes((len(words)+7)//8,'little')).decode()})
+ return mask
+for n in range(3,7):
+ add('length',n,f'has exactly {n} letters',lambda w,n=n:len(w)==n)
+for n in range(1,5):
+ add('vowels',n,f'has exactly {n} vowel letters (A, E, I, O, U)',lambda w,n=n:sum(c in 'aeiou' for c in w)==n)
+ add('atleastvowels',n,f'has at least {n} vowel letters (A, E, I, O, U)',lambda w,n=n:sum(c in 'aeiou' for c in w)>=n)
+for n in range(2,7):add('unique',n,f'has exactly {n} different letters',lambda w,n=n:len(set(w))==n)
+for c in 'abcdefghijklmnopqrstuvwxyz':
+ add('starts',c,f'starts with {c.upper()}',lambda w,c=c:w.startswith(c))
+ add('ends',c,f'ends with {c.upper()}',lambda w,c=c:w.endswith(c))
+ add('contains',c,f'contains {c.upper()}',lambda w,c=c:c in w)
+ add('count',c,f'contains {c.upper()} exactly twice',lambda w,c=c:w.count(c)==2)
+for pair in ['th','sh','ch','wh','ph','ck','st','sp','sc','tr','dr','br','cr','fr','gr','pr','bl','cl','fl','gl','pl','sl','sw','sk','sm','sn','ng','nt','nd','mp','ld','rd','rt','rn','rs','ss','ll','ee','oo','ea','ai','ay','au','aw','ie','io','oa','oi','ou','ow','ue','ar','er','ir','or','ur','an','en','in','on','un','at','et','it','ot','ut','ac','ec','ic','oc','uc','al','el','il','ol','ul','le','ly','ed','es','er','re','de','un','up','ex','ab','ad','am','ap','as','be','bi','bo','co','di','do','em','im','mi','ne','no','ob','op','os','pa','pe','pi','po','ra','ri','ro','sa','se','si','so','ta','te','ti','to','vi','wa','we','wi']:
+ add('pair',pair,f'contains the adjacent letters {pair.upper()}',lambda w,pair=pair:pair in w)
+for kind,text,predicate in [
+ ('even','has an even number of letters',lambda w:len(w)%2==0),
+ ('vowelstart','starts with a vowel (A, E, I, O, U)',lambda w:w[0] in 'aeiou'),
+ ('vowelend','ends with a vowel (A, E, I, O, U)',lambda w:w[-1] in 'aeiou'),
+ ('double','has the same letter twice in a row',lambda w:any(a==b for a,b in zip(w,w[1:]))),
+ ('repeat','uses at least one letter more than once',lambda w:len(set(w))<len(w)),
+ ('sameends','starts and ends with the same letter',lambda w:w[0]==w[-1]),
+ ('alphabet','starts with a letter earlier in the alphabet than its final letter',lambda w:w[0]<w[-1]),
+ ('vowelrun','has two vowels next to each other (A, E, I, O, U)',lambda w:any(a in 'aeiou' and b in 'aeiou' for a,b in zip(w,w[1:]))),
+ ('consonantrun','has three consonants next to each other (Y counts as a consonant)',lambda w:any(all(c not in 'aeiou' for c in w[i:i+3]) for i in range(len(w)-2))),
+ ('voweleven','has an even number of vowel letters (zero also counts)',lambda w:sum(c in 'aeiou' for c in w)%2==0),
+ ('uniquevowels','never repeats a vowel letter (A, E, I, O, U)',lambda w:len([c for c in w if c in 'aeiou'])==len(set(w)&set('aeiou'))),
+ ('alternating','alternates vowels and consonants (Y counts as a consonant)',lambda w:all((a in 'aeiou')!=(b in 'aeiou') for a,b in zip(w,w[1:])))]:add(kind,None,text,predicate)
+masks=[int.from_bytes(base64.b64decode(a['mask']),'little') for a in atoms]
+# Deduplicate full classifications, not just rule wording.
+decks={'easy':[],'classic':[],'expert':[]};seen=set(masks)
+for a in atoms:decks['easy'].append({'id':f"rule:{a['id']}",'a':a['id'],'op':'single','b':None})
+rng=random.Random(823717)
+pairs=[(i,j) for i in range(len(atoms)) for j in range(i+1,len(atoms))];rng.shuffle(pairs)
+for difficulty,ops,target in [('classic',['and','or'],4000),('expert',['xor','andnot'],4000)]:
+ for i,j in pairs:
+  for op in rng.sample(ops,len(ops)):
+   x,y=masks[i],masks[j];mask={'and':x&y,'or':x|y,'xor':x^y,'andnot':x&~y}[op]&allmask
+   count=bin(mask).count('1')
+   if mask in seen or count<64 or count>len(words)-64 or min(count,len(words)-count)<len(words)*.015:continue
+   seen.add(mask);decks[difficulty].append({'id':f'rule:{atoms[i]["id"]}:{op}:{atoms[j]["id"]}','a':atoms[i]['id'],'op':op,'b':atoms[j]['id']})
+   if len(decks[difficulty])>=target:break
+  if len(decks[difficulty])>=target:break
+assert all(decks.values())
+data={'words':words,'atoms':atoms,'decks':decks}
+jsondata=json.dumps(data,separators=(',',':'))
+(root/'api/rulebreakers-data.php').write_text("<?php\n// Generated by tools/generate-rulebreakers.py. SCOWL license: WORDLIST-LICENSE.txt.\nfunction party_rule_data(): array {static $data;if($data===null)$data=json_decode(<<<'RULES'\n"+jsondata+"\nRULES\n,true);return $data;}\n")
+print(len(words),'words;',len(atoms),'distinct atomic rules;', {k:len(v) for k,v in decks.items()})

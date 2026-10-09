@@ -1,12 +1,12 @@
 PARTY ROOM — GODADDY CPANEL UPLOAD
-RELEASE: 2026-10-08 · QR invites, mobile controls, and room rejoin fixes
+RELEASE: 2026-10-08 · 13 games, including Rulebreakers, Alien Dictionary, and Question Quest
 
 1. In cPanel, choose PHP 8.0 or newer for your domain (MultiPHP Manager or Select PHP Version).
 2. Upload the latest ZIP into public_html and extract it, overwriting the existing party-room folder and its files. The ZIP contains one folder, party-room, with index.html inside. If your live folder has another name, replace its contents with the contents of party-room; do not create a second nested party-room folder.
 3. Open https://YOUR-DOMAIN/party-room/ . You may rename the folder, or put its contents inside another subfolder. Keep every included file and directory together.
 4. Barcraft: open it and start a beat. All other games: create a room, then use another device to join with its five-character code, invite link, or QR code. Tap the QR to enlarge it for a phone camera.
 
-No Node server, build step, database, or external multiplayer account is required on GoDaddy. The nine live games use api/room.php on your hosting account. The portal and game screens use HTML, CSS, and JavaScript with relative URLs. Direct game URLs and invite links work from subfolders without rewrite rules.
+No Node server, build step, database, or external multiplayer account is required on GoDaddy. The twelve live games use api/room.php on your hosting account. The portal and game screens use HTML, CSS, and JavaScript with relative URLs. Direct game URLs and invite links work from subfolders without rewrite rules.
 
 Room storage is created automatically in party-room-data next to public_html, outside the public website. If PHP cannot create it, use cPanel File Manager to create party-room-data in your account home (next to public_html), with permissions 0700 and ownership matching your hosting account. PHP needs read/write access there. Keep this folder outside public_html. Rooms expire after six hours without activity.
 
@@ -28,3 +28,6 @@ No browser extension or app is needed to play in Chrome or Safari. Party invites
 UPDATING AN EXISTING SITE
 After replacing the full folder, hard-refresh your browser once (Mac: Command+Shift+R; Windows: Ctrl+Shift+R). Script and stylesheet URLs include a release version, and the included .htaccess requests revalidation for future updates. If your hosting uses a separate page/CDN cache, purge that cache after upload.
 To see the QR, open any live game and create or join a party. It appears next to the five-character code. On a phone during play, tap Party & invites to expand the panel. Barcraft is solo and has no party QR.
+
+THREE NEW DEDUCTION GAMES
+Rulebreakers: 8,244 distinct spelling rules over 16,579 dictionary words. Test words and compose a rule; wrong rules give counterexamples. Alien Dictionary: fresh alien words, grammar, illustrated examples, and eight translations per round. Question Quest: 3,200 case setups and newly generated suspect profiles; spend question credits to find the responsible visitor. All three need at least two players, include brief entry-screen instructions and How to play, and support mobile controls, party codes, QR invites, private attempts, and 1/3/5/10 rounds. Choose the difficulty before starting. Finite banks recycle eventually; generated combinations provide additional variety.
