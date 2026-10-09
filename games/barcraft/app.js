@@ -1,6 +1,8 @@
-import {BeatEngine,tracks} from './audio.js?v=20261008-deduction-1';
-import {createRhymeChain,getWordPool,wordBankSize} from './rhymes.js?v=20261008-deduction-1';
-import {WordMemory} from './word-memory.js?v=20261008-deduction-1';
+import {setupComfort} from '../../shared/ui-comfort.js?v=20261008-refine-1';
+import {BeatEngine,tracks} from './audio.js?v=20261008-refine-1';
+import {createRhymeChain,getWordPool,wordBankSize} from './rhymes.js?v=20261008-refine-1';
+import {WordMemory} from './word-memory.js?v=20261008-refine-1';
+setupComfort(document);
 const $=id=>document.getElementById(id),engine=new BeatEngine();
 let storage;try{storage=localStorage;}catch{storage=null;}
 const memory=WordMemory.load(storage);

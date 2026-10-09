@@ -1,14 +1,17 @@
-import {setupInvites} from './party-invite.js?v=20261008-deduction-1';
-import {PartyClient} from './party-client.js?v=20261008-deduction-1';
-import {rememberPrompts,recentForRequest} from './prompt-memory.js?v=20261008-deduction-1';
+import {setupComfort} from './ui-comfort.js?v=20261008-refine-1';
+import {setupInvites} from './party-invite.js?v=20261008-refine-1';
+import {PartyClient} from './party-client.js?v=20261008-refine-1';
+import {rememberPrompts,recentForRequest} from './prompt-memory.js?v=20261008-refine-1';
 export const $=id=>document.getElementById(id);
 const names={wavelength:'Wavelength',imposter:'Imposter',scattergories:'Scattergories',hivemind:'Hive Mind',apples:'Apples to Apples',humanity:'Cards Against Humanity','desktop-disaster':'Desktop Disaster','word-circuit':'Word Circuit','sudoku-race':'Sudoku Race','rulebreakers':'Rulebreakers','alien-dictionary':'Alien Dictionary','question-quest':'Question Quest'};
 const minimums={'word-circuit':1,'sudoku-race':1,imposter:3,hivemind:3,apples:4,humanity:4};
 const colors=['#c8b7fb','#edb396','#b4c7b5','#a9cadd','#ddafd0','#d7c68e'];
 export function playerName(room,id){return room.players.find(p=>p.id===id)?.name||'A player';}
-export function notice(message){$('notice').textContent=message;$('notice').hidden=!message;}
+export function notice(message){const node=$('notice');node.replaceChildren();node.hidden=!message;if(!message)return;const copy=document.createElement('span');copy.textContent=message;const close=document.createElement('button');close.type='button';close.className='notice-close';close.setAttribute('aria-label','Dismiss message');close.textContent='×';close.addEventListener('click',()=>notice(''));node.append(copy,close);}
 export function setupParty(game,render){
-  let snapshot='',previousPhase='',previousRound=0;document.body.dataset.game=game;const invites=setupInvites(document,location,navigator,notice);
+  let snapshot='',previousPhase='',previousRound=0;document.body.dataset.game=game;const invites=setupInvites(document,location,navigator,notice);setupComfort(document);
+  try{const name=localStorage.getItem('party-room.nickname');if(name)for(const id of ['create-name','join-name'])$(id).value=name.slice(0,24);}catch{}
+  for(const id of ['create-name','join-name'])$(id).addEventListener('input',event=>{const other=$(id==='create-name'?'join-name':'create-name');other.value=event.target.value;});
   const client=new PartyClient(game,room=>{
     if(!room){$('lobby').hidden=false;$('party').hidden=true;snapshot='';previousPhase='';previousRound=0;invites.close();$('game-stage').replaceChildren();delete $('host-controls').dataset.signature;render(null,client);return;}
     rememberPrompts(game,room);$('lobby').hidden=true;$('party').hidden=false;$('room-code').textContent=room.code;
@@ -18,9 +21,9 @@ export function setupParty(game,render){
     $('players').replaceChildren(...room.players.map((p,index)=>{
       const row=document.createElement('div');row.className='player-row';const avatar=document.createElement('span');avatar.className='avatar';avatar.style.background=colors[index%colors.length];avatar.textContent=p.name.charAt(0).toUpperCase();
       const label=document.createElement('span');label.className='player-name';label.textContent=p.name+(p.id===room.you?' (you)':'');const status=document.createElement('small');status.textContent=p.id===room.host?'Host':(!p.online?'Away':room.participants.length&&!room.participants.includes(p.id)?'Next round':'Here');row.append(avatar,label,status);return row;
-    }));render(room,client);if(matchMedia('(max-width:760px)').matches&&room.phase!=='lobby'&&((previousPhase==='lobby')||(previousRound&&room.round!==previousRound))){$('game-stage').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'});}previousPhase=room.phase;previousRound=room.round;
+    }));const transition=previousPhase!==room.phase||previousRound!==room.round;$('game-stage').dataset.phase=room.phase;if(transition){$('game-stage').classList.remove('stage-enter');void $('game-stage').offsetWidth;$('game-stage').classList.add('stage-enter');}render(room,client);if(room.phase==='lobby'&&$('start-game')){const minimum=minimums[game]||2,online=room.players.filter(p=>p.online).length,missing=Math.max(0,minimum-online);$('start-game').disabled=missing>0;$('start-game').textContent=missing?`Waiting for ${missing} more ${missing===1?'player':'players'}`:`Start ${names[game]}`;}if(matchMedia('(max-width:760px)').matches&&room.phase!=='lobby'&&((previousPhase==='lobby')||(previousRound&&room.round!==previousRound))){$('game-stage').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'});}previousPhase=room.phase;previousRound=room.round;
   },status=>{$('connection').textContent=status;$('connection').classList.toggle('offline',status!=='Live');});
-  const enter=async(action,form)=>{notice('');const button=form.querySelector('button');button.disabled=true;try{await client.enter(action,{name:$(action==='create'?'create-name':'join-name').value,code:$('join-code').value.toUpperCase()});}catch(error){notice(error.message);}finally{button.disabled=false;}};
+  const enter=async(action,form)=>{notice('');const button=form.querySelector('button');if(button.disabled)return;const label=button.innerHTML;button.disabled=true;button.textContent=action==='create'?'Creating party…':'Joining party…';form.setAttribute('aria-busy','true');try{await client.enter(action,{name:$(action==='create'?'create-name':'join-name').value,code:$('join-code').value.toUpperCase()});try{localStorage.setItem('party-room.nickname',$(action==='create'?'create-name':'join-name').value.trim());}catch{}}catch(error){notice(error.message);}finally{button.disabled=false;button.innerHTML=label;form.removeAttribute('aria-busy');}};
   $('create-form').addEventListener('submit',event=>{event.preventDefault();enter('create',event.currentTarget);});
   $('join-form').addEventListener('submit',event=>{event.preventDefault();enter('join',event.currentTarget);});
   $('join-code').addEventListener('input',event=>{event.target.value=event.target.value.toUpperCase().replace(/[^A-Z2-9]/g,'');});
@@ -28,14 +31,14 @@ export function setupParty(game,render){
   $('leave-party').addEventListener('click',async()=>{try{await client.leave();notice('You left the party.');}catch(error){notice(error.message);}});
   $('help').addEventListener('click',()=>$('help-dialog').showModal());$('close-help').addEventListener('click',()=>$('help-dialog').close());
   $('share-link').addEventListener('click',event=>event.target.select());
-  const code=(new URL(location.href).searchParams.get('room')||'').toUpperCase();if(code)$('join-code').value=code;
+  const code=(new URL(location.href).searchParams.get('room')||'').toUpperCase();if(code){$('join-code').value=code;$('join-form').classList.add('invited');document.querySelector('.join-card h2').textContent='Your invite is ready.';document.querySelector('.join-card p').textContent='Enter your name and join. The party code is already filled in.';}
   client.restore(code);return client;
 }
 export async function perform(client,action,payload={}){notice('');try{await client.act(action,{...payload,...(['start','again'].includes(action)?{recent:recentForRequest(client.game)}:{})});}catch(error){notice(error.message);}}
 export function lobbyContent(room,game){
   const stage=$('game-stage');const savedChoices=Object.fromEntries([...stage.querySelectorAll('select')].map(node=>[node.id,node.value]));stage.replaceChildren();const icon=document.createElement('span');icon.className='stage-icon';icon.textContent=({wavelength:'◓',imposter:'◈',scattergories:'Aa',hivemind:'⬡',apples:'✿',humanity:'▣','desktop-disaster':'▤','word-circuit':'Aa','sudoku-race':'▦','rulebreakers':'?','alien-dictionary':'◉','question-quest':'⌕'})[game];
   const h=document.createElement('h2');h.textContent='Get everyone in the room.';const p=document.createElement('p');p.className='stage-copy';const host=room.you===room.host;const minimum=minimums[game]||2;
-  p.textContent=host?`Share the five-character code. Start when at least ${minimum} players are here.`:`Waiting for ${playerName(room,room.host)} to start. You’re in.`;
+  p.textContent=host?`Share the five-character code. Start when at least ${minimum} ${minimum===1?'player is':'players are'} here.`:`Waiting for ${playerName(room,room.host)} to start. You’re in.`;
   stage.append(icon,h,p);
   if(game==='imposter'&&host){const label=document.createElement('label');label.className='category-select';label.textContent='Secret word category';const select=document.createElement('select');select.id='category';for(const category of ['Mixed','Food','Places','Objects','Animals','Activities','Entertainment']){const option=document.createElement('option');option.value=category;option.textContent=category;select.append(option);}label.append(select);stage.append(label);}
   if(host&&['hivemind','humanity'].includes(game)){const label=document.createElement('label');label.className='category-select';label.textContent=game==='hivemind'?'Hive size':'Game length';const select=document.createElement('select');select.id=game==='hivemind'?'hive-size':'target-score';for(const [value,text] of game==='hivemind'?[[6,'6 levels · Standard'],[8,'8 levels · Longer game']]:[[7,'First to 7 points'],[5,'First to 5 points'],[10,'First to 10 points'],[15,'First to 15 points'],[0,'Free play · Host ends game']]){const option=document.createElement('option');option.value=value;option.textContent=text;select.append(option);}label.append(select);stage.append(label);}

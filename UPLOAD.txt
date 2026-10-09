@@ -1,5 +1,5 @@
 PARTY ROOM — GODADDY CPANEL UPLOAD
-RELEASE: 2026-10-08 · 13 games, including Rulebreakers, Alien Dictionary, and Question Quest
+RELEASE: 2026-10-08 · 13 games · Refined mobile library and game controls
 
 1. In cPanel, choose PHP 8.0 or newer for your domain (MultiPHP Manager or Select PHP Version).
 2. Upload the latest ZIP into public_html and extract it, overwriting the existing party-room folder and its files. The ZIP contains one folder, party-room, with index.html inside. If your live folder has another name, replace its contents with the contents of party-room; do not create a second nested party-room folder.
@@ -31,3 +31,6 @@ To see the QR, open any live game and create or join a party. It appears next to
 
 THREE NEW DEDUCTION GAMES
 Rulebreakers: 8,244 distinct spelling rules over 16,579 dictionary words. Test words and compose a rule; wrong rules give counterexamples. Alien Dictionary: fresh alien words, grammar, illustrated examples, and eight translations per round. Question Quest: 3,200 case setups and newly generated suspect profiles; spend question credits to find the responsible visitor. All three need at least two players, include brief entry-screen instructions and How to play, and support mobile controls, party codes, QR invites, private attempts, and 1/3/5/10 rounds. Choose the difficulty before starting. Finite banks recycle eventually; generated combinations provide additional variety.
+
+MOBILE REFINEMENTS
+Filter the library by game style and player count. Your nickname is remembered on your device between games. Live-game messages remain visible near the bottom and can be dismissed. Dialogs keep the background still and close with the close button, Escape, or a tap outside. Short phone screens use normal scrolling instead of sticky controls that cover the board.

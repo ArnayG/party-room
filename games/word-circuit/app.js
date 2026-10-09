@@ -1,7 +1,7 @@
-import {$,setupParty,perform,lobbyContent,roomControls,notice} from '../../shared/party-ui.js?v=20261008-deduction-1';
-import {el,button,scores} from '../../shared/game-tools.js?v=20261008-deduction-1';
-import {raceClock,paintRaceStatus,standings} from '../../shared/race-ui.js?v=20261008-deduction-1';
-import {inspectWord} from './rules.js?v=20261008-deduction-1';
+import {$,setupParty,perform,lobbyContent,roomControls,notice} from '../../shared/party-ui.js?v=20261008-refine-1';
+import {el,button,scores} from '../../shared/game-tools.js?v=20261008-refine-1';
+import {raceClock,paintRaceStatus,standings} from '../../shared/race-ui.js?v=20261008-refine-1';
+import {inspectWord} from './rules.js?v=20261008-refine-1';
 let latest,client,key='',pathKey='',dictionary=null,busy=false;
 fetch(new URL('../../api/word-circuit-words.txt',import.meta.url)).then(r=>{if(!r.ok)throw Error();return r.text();}).then(text=>{dictionary=new Set(text.trim().split(/\s+/));feedback();}).catch(()=>{});
 function feedback(){const input=$('next-word'),output=$('word-feedback');if(input&&output&&latest?.path){output.textContent=inspectWord(input.value,latest.path,dictionary);output.classList.toggle('valid',output.textContent==='Valid next word.');}}
