@@ -47,13 +47,15 @@ function party_alien_puzzle(string $difficulty): array {
  foreach(['noun','adj','verb','number'] as $k=>$kind){$pool=$vocabulary[$kind];shuffle($pool);$lexicon[$kind]=[];foreach(array_slice($pool,0,$sizes[$k]) as [$word,$icon]){do{$alien=$syllables[random_int(0,count($syllables)-1)].$syllables[random_int(0,count($syllables)-1)];}while(isset($used[$alien]));$used[$alien]=true;$lexicon[$kind][]=['kind'=>$kind,'word'=>$word,'icon'=>$icon,'alien'=>$alien];$number++;}}
  $orders=$difficulty==='easy'?['SVO','SOV']:['SVO','SOV','OSV','OVS','VSO','VOS'];$phraseOrders=[['number','adj','noun'],['number','noun','adj'],['adj','noun','number'],['noun','adj','number']];$language=['lexicon'=>$lexicon,'sentenceOrder'=>$orders[random_int(0,count($orders)-1)],'phraseOrder'=>$phraseOrders[random_int(0,count($phraseOrders)-1)]];
  $examples=[];$seen=[];
- // Contrast examples establish meanings, then full sentences establish grammar.
- foreach($lexicon['noun'] as $noun){$m=[$lexicon['adj'][0],$noun];$examples[]=['meaning'=>$m,'english'=>party_alien_caption($m),'alien'=>party_alien_translate($m,$language),'icons'=>[$noun['icon']]];}
- foreach(array_slice($lexicon['adj'],1) as $adj){$m=[$adj,$lexicon['noun'][0]];$examples[]=['meaning'=>$m,'english'=>party_alien_caption($m),'alien'=>party_alien_translate($m,$language),'icons'=>[$lexicon['noun'][0]['icon']]];}
- foreach($lexicon['number'] as $count){$m=[$count,$lexicon['adj'][0],$lexicon['noun'][0]];$examples[]=['meaning'=>$m,'english'=>party_alien_caption($m),'alien'=>party_alien_translate($m,$language),'icons'=>[$lexicon['noun'][0]['icon']]];}
- foreach($lexicon['verb'] as $verb){$m=[$lexicon['noun'][0],$verb,$lexicon['noun'][1]];$examples[]=['meaning'=>$m,'english'=>party_alien_caption($m),'alien'=>party_alien_translate($m,$language),'icons'=>[$lexicon['noun'][0]['icon'],$lexicon['noun'][1]['icon']]];}
- $m=[$lexicon['noun'][1],$lexicon['verb'][0],$lexicon['noun'][0]];$examples[]=['meaning'=>$m,'english'=>party_alien_caption($m),'alien'=>party_alien_translate($m,$language),'icons'=>[$lexicon['noun'][1]['icon'],$lexicon['noun'][0]['icon']]];
- for($n=0;$n<40&&!party_alien_examples_identify($examples,$lexicon);$n++){$m=party_alien_meaning($lexicon,(bool)random_int(0,1));$examples[]=['meaning'=>$m,'english'=>party_alien_caption($m),'alien'=>party_alien_translate($m,$language),'icons'=>array_values(array_filter(array_column($m,'icon')))];}
+ // Two contrasting contexts per term guarantee identifiable meanings without
+ // relying on random coverage. Keep the reference sheet short on phones.
+ $add=function(array $meaning) use (&$examples,$language): void {
+  $examples[]=['meaning'=>$meaning,'english'=>party_alien_caption($meaning),'alien'=>party_alien_translate($meaning,$language),'icons'=>array_values(array_filter(array_column($meaning,'icon')))];
+ };
+ foreach($lexicon['noun'] as $noun)foreach(array_slice($lexicon['adj'],0,2) as $adj)$add([$adj,$noun]);
+ foreach(array_slice($lexicon['adj'],2) as $adj)foreach(array_slice($lexicon['noun'],0,2) as $noun)$add([$adj,$noun]);
+ foreach($lexicon['number'] as $count){$add([$count,$lexicon['adj'][0],$lexicon['noun'][0]]);$add([$count,$lexicon['adj'][1],$lexicon['noun'][1]]);}
+ foreach($lexicon['verb'] as $verb){$add([$lexicon['noun'][0],$verb,$lexicon['noun'][1]]);$add([$lexicon['noun'][1],$verb,$lexicon['noun'][0]]);}
  party_require(party_alien_examples_identify($examples,$lexicon),'Could not generate a language. Try again.',503);
  foreach($examples as $example)$seen[$example['english']]=true;$challenges=[];
  for($i=0;$i<8;$i++){$sentence=$i>=2;for($tries=0;$tries<200;$tries++){if($tries>=24)$sentence=true;$meaning=party_alien_meaning($lexicon,$sentence);$english=party_alien_caption($meaning);if(!isset($seen[$english]))break;}party_require(!isset($seen[$english]),'Could not generate fresh translations. Try again.',503);$seen[$english]=true;$correct=party_alien_translate($meaning,$language);$options=[['english'=>$english,'alien'=>$correct]];$keys=[$english=>true];

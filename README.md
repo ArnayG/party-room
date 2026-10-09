@@ -59,3 +59,5 @@ Room-start requests transmit the newest prompt history that fits the request lim
 ### Interface refinements
 
 The portal filters games by style, group size, and search together; solo and two-player filters respect the game minimums. Compact mobile covers make the full library easier to browse. Live games remember your nickname locally, explain prefilled invites, show progress while joining, and keep dismissible messages in view. Help and QR dialogs lock background scrolling and support outside-tap dismissal. Round transitions respect reduced motion. Shared touch spacing, readable help, selected cards, and short-screen layouts apply across the collection. These interactions have DOM regression tests; screenshot checks still require a connected browser.
+
+Alien Dictionary uses paired contrast examples to guarantee every term appears in at least two distinguishable contexts, with at most 20 examples. This avoids rare failures from random evidence coverage.
