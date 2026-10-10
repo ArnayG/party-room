@@ -211,3 +211,14 @@ test('all new stages recover on timers, late arrivals wait, and private source b
 test('host can kick a member from the party lobby or game, guests cannot kick, removed sessions lose access',async()=>{
  const s=await create('party',3);await act(s[1],'kick',{player:s[2].id},403);await act(s[0],'kick',{player:s[0].id},400);let r=await act(s[0],'kick',{player:s[2].id});assert.equal(r.players.length,2);await act(s[2],'state',{},401);await act(s[2],'select_game',{selection:'imposter'},401);await act(s[0],'select_game',{selection:'fact-or-fiction'});s[0].game='fact-or-fiction';s[1].game='fact-or-fiction';await act(s[0],'start');r=await act(s[0],'kick',{player:s[1].id});assert.equal(r.players.length,1);await act(s[1],'state',{},401);await act(s[0],'finish_stage');
 });
+
+test('legacy numeric player IDs cannot vote for their own bluffs, drawings or shirts',async()=>{
+ for(const game of ['fact-or-fiction','doodle-bluff','thread-battle','quiz-after-dark']){
+  const s=await create(game,2);await changeStored(s[0],r=>{r.players.forEach((p,i)=>p.id=String(123456789010+i));r.host=r.players[0].id;});s.forEach((p,i)=>p.id=String(123456789010+i));await act(s[0],'start',{rounds:1});
+  if(game==='fact-or-fiction'){await act(s[0],'write',{text:'invented answer one'});await act(s[1],'write',{text:'invented answer two'});const r=await act(s[0],'state'),own=r.entries[0].options.find(o=>o.text==='invented answer one');assert.ok(!r.entries[0].eligible.includes(own.id));await act(s[0],'vote',{entry:'fact',choice:own.id},400);}
+  else if(game==='quiz-after-dark'){await act(s[0],'answer',{choice:0});assert.deepEqual((await act(s[1],'state')).jbReady,[s[0].id]);}
+  else{await act(s[0],'draw',{strokes});await act(s[1],'draw',{strokes});if(game==='doodle-bluff'){for(const p of s){const r=await act(p,'state');assert.equal(r.pictures.length,1);await act(p,'bluff',{picture:r.pictures[0].id,text:'invented drawing label'});}assert.equal((await act(s[0],'state')).entries.find(e=>e.id==='d0').eligible.length,0);}
+   else{await act(s[0],'slogans',{texts:['one','two']});await act(s[1],'slogans',{texts:['three','four']});await act(s[0],'design',{drawing:'a0',slogan:'s0'});await act(s[1],'design',{drawing:'a1',slogan:'s2'});const r=await act(s[0],'state'),own=r.entries[0].options.find(o=>o.text==='one');assert.ok(!r.entries[0].eligible.includes(own.id));}
+  }
+ }
+});

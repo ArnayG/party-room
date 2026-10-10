@@ -8,7 +8,7 @@ require_once __DIR__.'/party-hub.php';
 require_once __DIR__.'/jackbox-games.php';
 function party_require(bool $ok, string $message, int $status=409): void { if (!$ok) throw new RuntimeException($message,$status); }
 function party_name($value): string { $text=trim((string)$value); party_require($text!=='' && strlen($text)<=60,'Choose a name of 1–24 characters.',400); if (function_exists('mb_substr')) return mb_substr($text,0,24); return substr($text,0,24); }
-function party_player(string $name): array { return ['id'=>bin2hex(random_bytes(6)),'token'=>bin2hex(random_bytes(24)),'name'=>party_name($name),'seen'=>time(),'left'=>false,'score'=>0]; }
+function party_player(string $name): array { return ['id'=>'p'.bin2hex(random_bytes(6)),'token'=>bin2hex(random_bytes(24)),'name'=>party_name($name),'seen'=>time(),'left'=>false,'score'=>0]; }
 function party_active(array $room): array { return array_values(array_filter($room['players'],fn($p)=>!$p['left'] && time()-$p['seen']<45)); }
 function party_ids(array $room): array { return array_column(party_active($room),'id'); }
 function party_member(array $room,string $id): ?array { foreach($room['players'] as $p) if($p['id']===$id) return $p; return null; }
