@@ -1,5 +1,5 @@
-import {longSessionFamilies} from './long-session-rhymes.js?v=20261008-refine-1';
-import {extraFamilies} from './expanded-rhymes.js?v=20261008-refine-1';
+import {longSessionFamilies} from './long-session-rhymes.js?v=20261009-party-1';
+import {extraFamilies} from './expanded-rhymes.js?v=20261009-party-1';
 // Curated by sound, not spelling. Each category can sustain a four-bar chain.
 const baseFamilies = [
   {id:'ight',label:'-ight',level:'easy',words:{

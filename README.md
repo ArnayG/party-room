@@ -1,6 +1,6 @@
 # Party Room
 
-GoDaddy cPanel party-game portal with thirteen games: Barcraft, cooperative Wavelength, Imposter, Scattergories, Hive Mind, Apples to Apples, Cards Against Humanity, Desktop Disaster, Word Circuit, Sudoku Race, Rulebreakers, Alien Dictionary, and Question Quest. All twelve live room games use the same room system. Live games support 5-character codes, private per-player views, up to 16 players, reconnection in the same tab, and host handoff after 90 seconds away. Wavelength has eight rounds with median group guesses; Imposter has five rounds with private roles, locked votes, and a final word guess. Scattergories has six two-minute rounds with twelve categories, private autosaved sheets, automatic letter/duplicate checks, and host review.
+GoDaddy cPanel party-game portal with nineteen games and one shared party per group. Create or join from the portal, or pick a game first. The host chooses games; everyone keeps the same five-character code, identity, and player list across switches. Returning to the portal keeps your party. Scores restart for the selected game. Eighteen live games support private per-player views, up to 16 players, reconnection in the same tab, and host handoff after 90 seconds away. The host can remove another player from the party; their old session is immediately revoked. Barcraft can share the party while playing audio locally on each device.
 
 ## Run locally
 
@@ -10,7 +10,7 @@ Requires PHP 8.0+ and Node for checks/build only. Run `npm ci` to install develo
 
 See UPLOAD.txt. Upload the ZIP into public_html and extract it, replacing the existing folder’s contents. Script imports and stylesheet URLs have a release version to prevent mixed cached files; bump that version when changing frontend assets. The included .htaccess also requests revalidation for HTML, JavaScript, CSS, and text files when Apache mod_headers is available. All public paths are relative; no root URL, domain name, rewrite router, or external multiplayer service is assumed. The shared client locates api/room.php relative to its own module URL, including renamed/nested folders. PHP saves JSON room files outside public_html and serializes only each player's authorized view. File locks serialize room updates.
 
-Barcraft remains a standalone frontend with local audio, fonts, and artwork. The live games require PHP and writable private room storage. In person or remote voice conversation is expected; the site does not provide voice chat. This room service suits casual parties on shared hosting, not large-scale high-traffic matchmaking.
+Barcraft uses local audio, fonts, and artwork; it also works as solo practice without a party. The live games require PHP and writable private room storage. In person or remote voice conversation is expected; the site does not provide voice chat. This room service suits casual parties on shared hosting, not large-scale high-traffic matchmaking.
 
 Add game folders under games/ and register cards in games.js. Original spectrum prompts and secret-word lists are in api/game-data.php and api/prompt-bank.php. The new question and card banks are in api/new-game-data.php. Wavelength is an unofficial adaptation credited in its instructions. Music attribution is available inside Barcraft.
 
@@ -22,7 +22,7 @@ On phones, the party panel collapses during play, card hands swipe horizontally,
 
 ## Prompt variety
 
-Barcraft has 3,003 distinct prompts in 111 sound families; Wavelength has 325 spectra; Imposter has 1,510 distinct words in six categories; Scattergories has 451 categories. Hive Mind has 697 questions. Apples has 307 adjective cards and 1,828 response cards. Cards Against Humanity has 240 black prompts (including 60 Pick 2 prompts) and 580 white responses. Desktop Disaster has five randomized mission types and 110 trap messages. Word Circuit has 5,400 verified pairs and a 16,604-word local dictionary. Sudoku Race has 450 unique-solution base puzzles, with randomized digits, row/column permutations, and transposition. The twelve live games keep a recent prompt history in localStorage for each browser. A host sends their history when starting a new game, avoiding recent content across sessions. Round decks also avoid repeats and Scattergories rotates letters. The finite banks eventually recycle old content; clearing storage or using another browser resets cross-session history.
+Barcraft has 3,003 distinct prompts in 111 sound families; Wavelength has 325 spectra; Imposter has 1,510 distinct words in six categories; Scattergories has 451 categories. Hive Mind has 697 questions. Apples has 307 adjective cards and 1,828 response cards. Cards Against Humanity has 240 black prompts (including 60 Pick 2 prompts) and 580 white responses. Desktop Disaster has five randomized mission types and 110 trap messages. Word Circuit has 5,400 verified pairs and a 16,604-word local dictionary. Sudoku Race has 450 unique-solution base puzzles, with randomized digits, row/column permutations, and transposition. The eighteen live games keep a recent prompt history in localStorage for each browser. A host sends their history when starting a new game, avoiding recent content across sessions. Round decks also avoid repeats and Scattergories rotates letters. The finite banks eventually recycle old content; clearing storage or using another browser resets cross-session history.
 
 ## New games and rule adaptations
 
@@ -40,7 +40,7 @@ Word Circuit uses [SCOWL 2020.12.07](https://wordlist.aspell.net/), English/Amer
 
 Card decks avoid cards still in hands and recycle when exhausted. Recent prompts and responses are remembered across games in the same browser, with finite banks eventually recycling. Hive matching review, card judge recovery, private hands and submissions, timers, scoring, role rotation, long sessions, and nested deployment are covered by tests.
 
-Tests cover private state serialization, complete sessions, timed reveal, score adjustments, queued client updates, stale responses after leaving, prompt memory, rhyme/audio behavior, and relative assets in a renamed nested deployment. Interaction tests cover portal search/navigation, controls for all thirteen games, all twelve invite panels, native-share fallback, card selection order and scroll preservation, answer entry, Wavelength nudges, Sudoku touch controls and dialog keyboard handling, and leaving/rejoining every live game. An independent decoder verifies QR images for every live game with normal, nested, and Unicode URLs. Visual browser verification requires a connected browser; no browser is connected in this workspace.
+Tests cover private state serialization, complete sessions, timed reveal, score adjustments, queued client updates, stale responses after leaving, prompt memory, rhyme/audio behavior, and relative assets in a renamed nested deployment. Interaction tests cover portal search/navigation, controls for all nineteen games, all eighteen invite panels, native-share fallback, card selection order and scroll preservation, answer entry, Wavelength nudges, Sudoku touch controls and dialog keyboard handling, and leaving/rejoining every live game. An independent decoder verifies QR images for every live game with normal, nested, and Unicode URLs. Visual browser verification requires a connected browser; no browser is connected in this workspace.
 
 ## GitHub development
 
@@ -61,3 +61,20 @@ Room-start requests transmit the newest prompt history that fits the request lim
 The portal filters games by style, group size, and search together; solo and two-player filters respect the game minimums. Compact mobile covers make the full library easier to browse. Live games remember your nickname locally, explain prefilled invites, show progress while joining, and keep dismissible messages in view. Help and QR dialogs lock background scrolling and support outside-tap dismissal. Round transitions respect reduced motion. Shared touch spacing, readable help, selected cards, and short-screen layouts apply across the collection. These interactions have DOM regression tests; screenshot checks still require a connected browser.
 
 Alien Dictionary uses paired contrast examples to guarantee every term appears in at least two distinguishable contexts, with at most 20 examples. This avoids rare failures from random evidence coverage.
+
+## Jackbox Games category
+
+These six original web adaptations use new names, artwork, and question wording. Each supports 2–16 players, mobile input, timed stages, private submissions, reconnect recovery, and 1/3/5/10 rounds. They simplify the commercial games rather than reproduce their complete content or rules. Two-player comedy and shirt sessions include house entries so both players can vote.
+
+| Game | Inspiration | Play |
+| --- | --- | --- |
+| Quiz After Dark | You Don't Know Jack | Fast four-choice trivia, speed points, and one eight-second screw per player. |
+| Punchline | Quiplash | Two private prompts per writer, anonymous response matchups, and audience votes. |
+| Fact or Fiction | Fibbage | Invent a believable lie, then find the truth among player bluffs and house decoys. |
+| Doodle Bluff | Drawful | Draw a secret prompt, invent captions for other drawings, and identify the original. |
+| Last Laugh Trivia | Trivia Murder Party | Trivia plus math, memory, and number traps; ghosts can revive, and escape distance wins. |
+| Thread Battle | Tee K.O. | Draw graphics, write slogans, mix the submissions into shirts, and vote. |
+
+Banks contain 121 factual questions, 717 total trivia questions, 9,600 generated comedy prompts, and 6,000 generated drawing prompts. Trivia favors the factual pool. Generated combinations provide variety, though some share a template. Recent prompt keys are remembered across sessions and game switches; finite banks eventually recycle. Host stage controls recover from absent players and unfinished submissions. Drawing strokes and all answers are validated on the server; answers, prompts, and author identities remain private until the appropriate stage.
+
+Inspiration and publisher descriptions: [Jackbox's games](https://www.jackboxgames.com/games), [Drawful](https://www.jackboxgames.com/games/drawful), [Trivia Murder Party](https://www.jackboxgames.com/games/trivia-murder-party), and [You Don't Know Jack](https://www.jackboxgames.com/games/the-jackbox-party-pack-5/you-dont-know-jack-full-stream).

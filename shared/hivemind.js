@@ -1,5 +1,5 @@
-import {$,setupParty,perform,lobbyContent,roomControls,playerName,notice} from './party-ui.js?v=20261008-refine-1';
-import {el,button} from './game-tools.js?v=20261008-refine-1';
+import {$,setupParty,perform,lobbyContent,roomControls,playerName,notice} from './party-ui.js?v=20261009-party-1';
+import {el,button} from './game-tools.js?v=20261009-party-1';
 let latest,client,key='',offset=0,saveTimer;
 function board(room){const node=el('div','','hive-board');const levels=room.phase==='reveal'&&!room.result.skipped?room.result.levels:room.levels;for(let level=0;level<=room.hiveSize;level++){const row=el('div','','hive-level');row.append(el('span',level===room.hiveSize?'Exit':level===0?'Top':`Level ${level+1}`,'level-name'));const pawns=el('div','','hive-pawns');for(const player of room.players)if(levels[player.id]===level){const pawn=el('span',player.name,'hive-pawn');pawn.classList.toggle('you',player.id===room.you);pawn.title=room.result?.scores?.[player.id]!==undefined?`${room.result.scores[player.id]} points this round`:player.name;pawns.append(pawn);}row.append(pawns);node.append(row);}return node;}
 function values(){return [...$('game-stage').querySelectorAll('.hive-answer')].map(input=>input.value);}

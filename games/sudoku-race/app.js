@@ -1,7 +1,7 @@
-import {$,setupParty,perform,lobbyContent,roomControls,notice} from '../../shared/party-ui.js?v=20261008-refine-1';
-import {el,button,scores} from '../../shared/game-tools.js?v=20261008-refine-1';
-import {raceClock,paintRaceStatus,standings} from '../../shared/race-ui.js?v=20261008-refine-1';
-import {sudokuPeers,sudokuConflicts,validDraft} from './rules.js?v=20261008-refine-1';
+import {$,setupParty,perform,lobbyContent,roomControls,notice} from '../../shared/party-ui.js?v=20261009-party-1';
+import {el,button,scores} from '../../shared/game-tools.js?v=20261009-party-1';
+import {raceClock,paintRaceStatus,standings} from '../../shared/race-ui.js?v=20261009-party-1';
+import {sudokuPeers,sudokuConflicts,validDraft} from './rules.js?v=20261009-party-1';
 let latest,client,key='',board='',notes=Array(81).fill(0),selected=0,pencil=false,dirty=false,revision=0,saveTimer=null,busy=false,undoStack=[],storageKey='';
 function unlocked(){return !!client?.session&&client.room?.code===latest?.code&&latest?.phase==='race'&&latest.participants.includes(latest.you)&&!latest.ready.includes(latest.you)&&Date.now()/1000+latest.serverTimeOffset>=latest.startsAt&&Date.now()/1000+latest.serverTimeOffset<latest.deadline;}
 function store(){try{localStorage.setItem(storageKey,JSON.stringify({board,notes}));}catch{}}

@@ -16,20 +16,19 @@ if(!is_writable($data))party_reply(['error'=>'Hosting cannot write room storage.
 $handle=null;
 try{
     if($action==='create'){
-        $game=(string)($input['game']??'');party_require(in_array($game,['wavelength','imposter','scattergories','hivemind','apples','humanity','desktop-disaster','word-circuit','sudoku-race','rulebreakers','alien-dictionary','question-quest'],true),'Choose a valid game.',400);$player=party_player((string)($input['name']??''));
+        $game=(string)($input['game']??'');party_require(in_array($game,party_games(),true),'Choose a valid game.',400);$player=party_player((string)($input['name']??''));
         $alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
         for($attempt=0;$attempt<15;$attempt++){$code='';for($i=0;$i<5;$i++)$code.=$alphabet[random_int(0,strlen($alphabet)-1)];$file=$data.'/'.$code.'.json';$handle=@fopen($file,'x+');if($handle)break;}
         party_require((bool)$handle,'Rooms are busy. Try again.',503);flock($handle,LOCK_EX);
-        $room=['code'=>$code,'game'=>$game,'host'=>$player['id'],'players'=>[$player],'phase'=>'lobby','round'=>0,'maxRounds'=>($game==='wavelength'?8:($game==='imposter'?5:6)),'participants'=>[],'result'=>null,'version'=>1,'updated'=>time(),'created'=>time(),'clues'=>[],'votes'=>[],'guesses'=>[],'usedWords'=>[],'usedSpectrums'=>[],'totalScore'=>0,'history'=>[]];
+        $room=party_initial($code,$game,$player['id'],[$player]);
     }else{
         $code=strtoupper(trim((string)($input['code']??'')));party_require((bool)preg_match('/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{5}$/',$code),'Enter a five-character room code.',400);
         $file=$data.'/'.$code.'.json';party_require(is_file($file),'That room does not exist or has expired.',404);$handle=fopen($file,'r+');party_require((bool)$handle,'Room storage is unavailable.',503);flock($handle,LOCK_EX);$room=json_decode(stream_get_contents($handle),true);
         party_require(is_array($room)&&time()-$room['updated']<21600,'That room has expired. Create a new one.',404);
         if($action==='join'){
-            party_require(($input['game']??'')===$room['game'],'This code belongs to the other game. Open that game to join.',400);
             party_require(count(array_filter($room['players'],fn($p)=>!$p['left']))<16,'This party is full (16 players).');$player=party_player((string)($input['name']??''));$room['players'][]=$player;$room['version']++;
         }else{
-            $token=(string)($input['token']??'');$player=null;foreach($room['players'] as &$entry)if(!$entry['left']&&hash_equals($entry['token'],$token)){$entry['seen']=time();$player=$entry;break;}unset($entry);
+            $token=(string)($input['token']??'');$player=null;foreach($room['players'] as $entry)if(($entry['kicked']??false)&&hash_equals($entry['token'],$token))party_require(false,'The host removed you from this party. You can join another party.',401);foreach($room['players'] as &$entry)if(!$entry['left']&&hash_equals($entry['token'],$token)){$entry['seen']=time();$player=$entry;break;}unset($entry);
             party_require((bool)$player,'Your session has ended. Join the party again.',401);
             if($action!=='state'){party_apply($room,$player['id'],$action,$input);$room['version']++;}
         }

@@ -1,12 +1,12 @@
 PARTY ROOM — GODADDY CPANEL UPLOAD
-RELEASE: 2026-10-08 · 13 games · Refined mobile library and game controls
+RELEASE: 2026-10-09 · 19 games · Shared parties, host removal, and Jackbox Games
 
 1. In cPanel, choose PHP 8.0 or newer for your domain (MultiPHP Manager or Select PHP Version).
 2. Upload the latest ZIP into public_html and extract it, overwriting the existing party-room folder and its files. The ZIP contains one folder, party-room, with index.html inside. If your live folder has another name, replace its contents with the contents of party-room; do not create a second nested party-room folder.
 3. Open https://YOUR-DOMAIN/party-room/ . You may rename the folder, or put its contents inside another subfolder. Keep every included file and directory together.
-4. Barcraft: open it and start a beat. All other games: create a room, then use another device to join with its five-character code, invite link, or QR code. Tap the QR to enlarge it for a phone camera.
+4. Create or join a party on the portal, or select a game first. Share the five-character code, invite link, or QR code. The host selects each game and can remove players. Return to the portal to choose another game while keeping the same party. Barcraft also supports solo practice. Tap the QR to enlarge it for a phone camera.
 
-No Node server, build step, database, or external multiplayer account is required on GoDaddy. The twelve live games use api/room.php on your hosting account. The portal and game screens use HTML, CSS, and JavaScript with relative URLs. Direct game URLs and invite links work from subfolders without rewrite rules.
+No Node server, build step, database, or external multiplayer account is required on GoDaddy. The eighteen live games use api/room.php on your hosting account. The portal and game screens use HTML, CSS, and JavaScript with relative URLs. Direct game URLs and invite links work from subfolders without rewrite rules.
 
 Room storage is created automatically in party-room-data next to public_html, outside the public website. If PHP cannot create it, use cPanel File Manager to create party-room-data in your account home (next to public_html), with permissions 0700 and ownership matching your hosting account. PHP needs read/write access there. Keep this folder outside public_html. Rooms expire after six hours without activity.
 
@@ -23,14 +23,20 @@ Hive Mind needs at least three players; Apples to Apples and Cards Against Human
 Word Circuit and Sudoku Race support solo practice or live races with up to 16 players. All dictionary checks run locally on your PHP host; no dictionary account, API key, Python, or external service is needed. Sudoku solutions stay on the server until reveal. Select the difficulty and round count in the lobby before starting.
 
 MOBILE PLAY
-No browser extension or app is needed to play in Chrome or Safari. Party invites collapse during play on phones; tap Party & invites to reopen the code, QR, and player list. Swipe card hands sideways. Use Wavelength’s slider or -1/+1 buttons and Sudoku’s on-screen number pad. Barcraft settings collapse above the stage; transport controls remain accessible. QR codes are generated locally and point to the same hosted game and room.
+No browser extension or app is needed to play in Chrome or Safari. Party invites collapse during play on phones; tap Party & invites to reopen the code, QR, and player list. Swipe card hands sideways. Use Wavelength’s slider or -1/+1 buttons and Sudoku’s on-screen number pad. Barcraft settings collapse above the stage; transport controls remain accessible. QR codes are generated locally and point to the shared party lobby in your hosted subfolder.
 
 UPDATING AN EXISTING SITE
 After replacing the full folder, hard-refresh your browser once (Mac: Command+Shift+R; Windows: Ctrl+Shift+R). Script and stylesheet URLs include a release version, and the included .htaccess requests revalidation for future updates. If your hosting uses a separate page/CDN cache, purge that cache after upload.
-To see the QR, open any live game and create or join a party. It appears next to the five-character code. On a phone during play, tap Party & invites to expand the panel. Barcraft is solo and has no party QR.
+To see the QR, open any live game and create or join a party. It appears next to the five-character code. On a phone during play, tap Party & invites to expand the panel. Barcraft shows a party-lobby link when playing in a party; its party QR is on that lobby.
 
 THREE NEW DEDUCTION GAMES
 Rulebreakers: 8,244 distinct spelling rules over 16,579 dictionary words. Test words and compose a rule; wrong rules give counterexamples. Alien Dictionary: fresh alien words, grammar, illustrated examples, and eight translations per round. Question Quest: 3,200 case setups and newly generated suspect profiles; spend question credits to find the responsible visitor. All three need at least two players, include brief entry-screen instructions and How to play, and support mobile controls, party codes, QR invites, private attempts, and 1/3/5/10 rounds. Choose the difficulty before starting. Finite banks recycle eventually; generated combinations provide additional variety.
 
 MOBILE REFINEMENTS
 Filter the library by game style and player count. Your nickname is remembered on your device between games. Live-game messages remain visible near the bottom and can be dismissed. Dialogs keep the background still and close with the close button, Escape, or a tap outside. Short phone screens use normal scrolling instead of sticky controls that cover the board.
+
+JACKBOX GAMES
+Six original adaptations: Quiz After Dark (trivia and screws), Punchline (comedy matchups), Fact or Fiction (bluffing trivia), Doodle Bluff (drawing and fake captions), Last Laugh Trivia (trivia survival), and Thread Battle (drawing and slogan shirts). Each supports 2–16 players with brief instructions, private submissions, timed stages, and host recovery controls. They use new names and original content with simplified rules. There are 121 facts, 717 trivia questions, 9,600 generated comedy prompts, and 6,000 generated drawing prompts. Finite banks eventually recycle.
+
+SHARED PARTIES
+Invites always open the portal party lobby. The same code works from every game. Only the host can switch games or remove a player; switching starts the selected game's lobby and resets game scores. A removed player's existing session no longer works. Returning to the portal keeps membership; Leave party explicitly disconnects. Everyone follows the host's next game choice. No additional service or server is required.

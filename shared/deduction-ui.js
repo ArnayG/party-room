@@ -1,5 +1,5 @@
-import {$,setupParty,perform,lobbyContent,roomControls,notice,playerName} from './party-ui.js?v=20261008-refine-1';
-import {el,button,scores} from './game-tools.js?v=20261008-refine-1';
+import {$,setupParty,perform,lobbyContent,roomControls,notice,playerName} from './party-ui.js?v=20261009-party-1';
+import {el,button,scores} from './game-tools.js?v=20261009-party-1';
 export const deductionInstructions={
  rulebreakers:['Study the green passing words and peach failing words. The hidden rule is about spelling, not a word’s meaning.','Test dictionary words of 3–6 letters. Build a rule from the condition menus; an incorrect rule gives you a counterexample.','Solve before five minutes expire. Score 12 minus tests after your first three and 2 per incorrect rule. Six incorrect rules lock your round.'],
  'alien-dictionary':['Study the example translations. Each alien word has one meaning; word order can differ from English.','Answer eight translations, alternating alien → English and English → alien. Tap an option to lock it: one attempt per question.','Each correct translation earns 2 points. You have six minutes. Switch between Study examples and Translations whenever you need.'],

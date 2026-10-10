@@ -1,35 +1,37 @@
-import {setupComfort} from './ui-comfort.js?v=20261008-refine-1';
-import {setupInvites} from './party-invite.js?v=20261008-refine-1';
-import {PartyClient} from './party-client.js?v=20261008-refine-1';
-import {rememberPrompts,recentForRequest} from './prompt-memory.js?v=20261008-refine-1';
+import {followGame} from './party-navigation.js?v=20261009-party-1';
+import {setupComfort} from './ui-comfort.js?v=20261009-party-1';
+import {setupInvites} from './party-invite.js?v=20261009-party-1';
+import {PartyClient} from './party-client.js?v=20261009-party-1';
+import {rememberPrompts,recentForRequest} from './prompt-memory.js?v=20261009-party-1';
 export const $=id=>document.getElementById(id);
-const names={wavelength:'Wavelength',imposter:'Imposter',scattergories:'Scattergories',hivemind:'Hive Mind',apples:'Apples to Apples',humanity:'Cards Against Humanity','desktop-disaster':'Desktop Disaster','word-circuit':'Word Circuit','sudoku-race':'Sudoku Race','rulebreakers':'Rulebreakers','alien-dictionary':'Alien Dictionary','question-quest':'Question Quest'};
+const names={wavelength:'Wavelength',imposter:'Imposter',scattergories:'Scattergories',hivemind:'Hive Mind',apples:'Apples to Apples',humanity:'Cards Against Humanity','desktop-disaster':'Desktop Disaster','word-circuit':'Word Circuit','sudoku-race':'Sudoku Race','rulebreakers':'Rulebreakers','alien-dictionary':'Alien Dictionary','question-quest':'Question Quest','quiz-after-dark':'Quiz After Dark',punchline:'Punchline','fact-or-fiction':'Fact or Fiction','doodle-bluff':'Doodle Bluff','last-laugh-trivia':'Last Laugh Trivia','thread-battle':'Thread Battle'};
 const minimums={'word-circuit':1,'sudoku-race':1,imposter:3,hivemind:3,apples:4,humanity:4};
 const colors=['#c8b7fb','#edb396','#b4c7b5','#a9cadd','#ddafd0','#d7c68e'];
 export function playerName(room,id){return room.players.find(p=>p.id===id)?.name||'A player';}
 export function notice(message){const node=$('notice');node.replaceChildren();node.hidden=!message;if(!message)return;const copy=document.createElement('span');copy.textContent=message;const close=document.createElement('button');close.type='button';close.className='notice-close';close.setAttribute('aria-label','Dismiss message');close.textContent='×';close.addEventListener('click',()=>notice(''));node.append(copy,close);}
-export function setupParty(game,render){
+export function setupParty(game,render,options={}){
   let snapshot='',previousPhase='',previousRound=0;document.body.dataset.game=game;const invites=setupInvites(document,location,navigator,notice);setupComfort(document);
   try{const name=localStorage.getItem('party-room.nickname');if(name)for(const id of ['create-name','join-name'])$(id).value=name.slice(0,24);}catch{}
   for(const id of ['create-name','join-name'])$(id).addEventListener('input',event=>{const other=$(id==='create-name'?'join-name':'create-name');other.value=event.target.value;});
   const client=new PartyClient(game,room=>{
     if(!room){$('lobby').hidden=false;$('party').hidden=true;snapshot='';previousPhase='';previousRound=0;invites.close();$('game-stage').replaceChildren();delete $('host-controls').dataset.signature;render(null,client);return;}
+    if(options.follow!==false&&room.game&&room.game!==game){followGame(room.game,room.code);return;}
     rememberPrompts(game,room);$('lobby').hidden=true;$('party').hidden=false;$('room-code').textContent=room.code;
-    const url=invites.update(room);if(url!==location.href)history.replaceState(null,'',url);
+    invites.update(room);const pageUrl=new URL(location.href);pageUrl.searchParams.set('room',room.code);if(pageUrl.href!==location.href)history.replaceState(null,'',pageUrl.href);
     const serialized=JSON.stringify(room);if(serialized===snapshot)return;snapshot=serialized;
     $('player-count').textContent=`${room.players.length} / 16 players`;
     $('players').replaceChildren(...room.players.map((p,index)=>{
       const row=document.createElement('div');row.className='player-row';const avatar=document.createElement('span');avatar.className='avatar';avatar.style.background=colors[index%colors.length];avatar.textContent=p.name.charAt(0).toUpperCase();
-      const label=document.createElement('span');label.className='player-name';label.textContent=p.name+(p.id===room.you?' (you)':'');const status=document.createElement('small');status.textContent=p.id===room.host?'Host':(!p.online?'Away':room.participants.length&&!room.participants.includes(p.id)?'Next round':'Here');row.append(avatar,label,status);return row;
+      const label=document.createElement('span');label.className='player-name';label.textContent=p.name+(p.id===room.you?' (you)':'');const status=document.createElement('small');status.textContent=p.id===room.host?'Host':(!p.online?'Away':room.participants.length&&!room.participants.includes(p.id)?'Next round':'Here');row.append(avatar,label,status);if(room.you===room.host&&p.id!==room.you){const kick=document.createElement('button');kick.className='kick-player';kick.type='button';kick.textContent='Remove';kick.setAttribute('aria-label',`Remove ${p.name} from party`);kick.addEventListener('click',()=>{if(confirm(`Remove ${p.name} from this party?`))perform(client,'kick',{player:p.id});});row.append(kick);}return row;
     }));const transition=previousPhase!==room.phase||previousRound!==room.round;$('game-stage').dataset.phase=room.phase;if(transition){$('game-stage').classList.remove('stage-enter');void $('game-stage').offsetWidth;$('game-stage').classList.add('stage-enter');}render(room,client);if(room.phase==='lobby'&&$('start-game')){const minimum=minimums[game]||2,online=room.players.filter(p=>p.online).length,missing=Math.max(0,minimum-online);$('start-game').disabled=missing>0;$('start-game').textContent=missing?`Waiting for ${missing} more ${missing===1?'player':'players'}`:`Start ${names[game]}`;}if(matchMedia('(max-width:760px)').matches&&room.phase!=='lobby'&&((previousPhase==='lobby')||(previousRound&&room.round!==previousRound))){$('game-stage').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'});}previousPhase=room.phase;previousRound=room.round;
-  },status=>{$('connection').textContent=status;$('connection').classList.toggle('offline',status!=='Live');});
-  const enter=async(action,form)=>{notice('');const button=form.querySelector('button');if(button.disabled)return;const label=button.innerHTML;button.disabled=true;button.textContent=action==='create'?'Creating party…':'Joining party…';form.setAttribute('aria-busy','true');try{await client.enter(action,{name:$(action==='create'?'create-name':'join-name').value,code:$('join-code').value.toUpperCase()});try{localStorage.setItem('party-room.nickname',$(action==='create'?'create-name':'join-name').value.trim());}catch{}}catch(error){notice(error.message);}finally{button.disabled=false;button.innerHTML=label;form.removeAttribute('aria-busy');}};
+  },status=>{$('connection').textContent=status;$('connection').classList.toggle('offline',status!=='Live');if(status.includes('removed you')||status.includes('session has ended')||status.includes('expired'))notice(status);});
+  const enter=async(action,form)=>{notice('');const button=form.querySelector('button');if(button.disabled)return;const label=button.innerHTML;button.disabled=true;button.textContent=action==='create'?'Creating party…':'Joining party…';form.setAttribute('aria-busy','true');try{await client.enter(action,{...(action==='create'&&options.initialGame?{game:options.initialGame()}:{}),name:$(action==='create'?'create-name':'join-name').value,code:$('join-code').value.toUpperCase()});try{localStorage.setItem('party-room.nickname',$(action==='create'?'create-name':'join-name').value.trim());}catch{}if(options.followOnEnter&&client.room?.game!=='party')followGame(client.room.game,client.room.code);}catch(error){notice(error.message);}finally{button.disabled=false;button.innerHTML=label;form.removeAttribute('aria-busy');}};
   $('create-form').addEventListener('submit',event=>{event.preventDefault();enter('create',event.currentTarget);});
   $('join-form').addEventListener('submit',event=>{event.preventDefault();enter('join',event.currentTarget);});
   $('join-code').addEventListener('input',event=>{event.target.value=event.target.value.toUpperCase().replace(/[^A-Z2-9]/g,'');});
   $('copy-code').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('share-link').value);notice('Invite link copied. Send it to your friends.');}catch{$('share-link').focus();$('share-link').select();notice('Copy the selected invite link and share it.');}});
   $('leave-party').addEventListener('click',async()=>{try{await client.leave();notice('You left the party.');}catch(error){notice(error.message);}});
-  $('help').addEventListener('click',()=>$('help-dialog').showModal());$('close-help').addEventListener('click',()=>$('help-dialog').close());
+  $('help')?.addEventListener('click',()=>$('help-dialog').showModal());$('close-help')?.addEventListener('click',()=>$('help-dialog').close());
   $('share-link').addEventListener('click',event=>event.target.select());
   const code=(new URL(location.href).searchParams.get('room')||'').toUpperCase();if(code){$('join-code').value=code;$('join-form').classList.add('invited');document.querySelector('.join-card h2').textContent='Your invite is ready.';document.querySelector('.join-card p').textContent='Enter your name and join. The party code is already filled in.';}
   client.restore(code);return client;

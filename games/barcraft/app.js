@@ -1,7 +1,9 @@
-import {setupComfort} from '../../shared/ui-comfort.js?v=20261008-refine-1';
-import {BeatEngine,tracks} from './audio.js?v=20261008-refine-1';
-import {createRhymeChain,getWordPool,wordBankSize} from './rhymes.js?v=20261008-refine-1';
-import {WordMemory} from './word-memory.js?v=20261008-refine-1';
+import {PartyClient} from '../../shared/party-client.js?v=20261009-party-1';
+import {followGame,gameUrl} from '../../shared/party-navigation.js?v=20261009-party-1';
+import {setupComfort} from '../../shared/ui-comfort.js?v=20261009-party-1';
+import {BeatEngine,tracks} from './audio.js?v=20261009-party-1';
+import {createRhymeChain,getWordPool,wordBankSize} from './rhymes.js?v=20261009-party-1';
+import {WordMemory} from './word-memory.js?v=20261009-party-1';
 setupComfort(document);
 const $=id=>document.getElementById(id),engine=new BeatEngine();
 let storage;try{storage=localStorage;}catch{storage=null;}
@@ -76,3 +78,5 @@ $('dictionary-total').textContent=`${wordBankSize.toLocaleString()} rhyme target
 [...document.querySelectorAll('[data-category],[data-position],[data-level]')].forEach(el=>el.setAttribute('aria-pressed',el.classList.contains('selected')));
 
 const studioMedia=matchMedia('(max-width:760px)'),studioSettings=$('studio-settings');studioSettings.open=!studioMedia.matches;studioMedia.addEventListener('change',()=>{studioSettings.open=!studioMedia.matches;});
+
+const studioParty=new PartyClient('barcraft',room=>{if(!room)return;if(room.game!=='barcraft'){followGame(room.game,room.code);return;}let banner=document.getElementById('studio-party');if(!banner){banner=document.createElement('div');banner.id='studio-party';banner.className='studio-party';document.querySelector('.main-content').prepend(banner);}banner.replaceChildren();const label=document.createElement('span');label.textContent=`Party ${room.code} · ${room.players.length} players`;const link=document.createElement('a');link.href=gameUrl('party',room.code).href;link.textContent='Party lobby / switch games';banner.append(label,link);},()=>{});studioParty.restore(new URL(location.href).searchParams.get('room'));

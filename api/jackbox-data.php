@@ -1,0 +1,150 @@
+<?php
+// Original question wording and generated prompts. No publisher card text or assets.
+function party_jb_facts(): array {
+ $rows=[
+ ['An octopus is apparently running a tiny cardio club: it has ___ hearts.','three','two','four','eight'],
+ ['Wombats have cornered the market on oddly shaped poop. Their droppings are approximately ___.','cubes','spheres','pyramids','spirals'],
+ ['A group of flamingos can be called a ___. It sounds like an excellent drag show.','flamboyance','parliament','crash','murmuration'],
+ ['The animal with fingerprints remarkably similar to a human’s is the ___.','koala','penguin','crocodile','giraffe'],
+ ['The tallest living land animal is the ___. Elevator maintenance is probably expensive.','giraffe','elephant','ostrich','moose'],
+ ['The mammal capable of true powered flight is the ___.','bat','flying squirrel','sugar glider','colugo'],
+ ['The largest living animal is the ___. So much animal, so little parking.','blue whale','whale shark','African elephant','giant squid'],
+ ['Sharks have skeletons primarily made of ___.','cartilage','bone','chitin','keratin'],
+ ['A narwhal’s long tusk is actually a modified ___.','tooth','horn','fin','rib'],
+ ['The animal whose scientific name is Gorilla gorilla is the western ___.','gorilla','chimpanzee','orangutan','baboon'],
+ ['The only continent with no native ants is ___.','Antarctica','Australia','Europe','South America'],
+ ['A baby kangaroo is called a ___. Very informal for a newborn.','joey','cub','calf','kit'],
+ ['A group of owls is often called a ___. No election required.','parliament','crash','pod','pride'],
+ ['A group of crows is traditionally called a ___.','murder','conspiracy','flock of lawyers','mob'],
+ ['A group of rhinos can be called a ___. Subtle creatures.','crash','tower','raft','business'],
+ ['A platypus lays ___. Being a mammal was not enough drama.','eggs','tiny live pups','cocoons','pearls'],
+ ['The pigment responsible for many carrots’ orange color is ___.','beta-carotene','chlorophyll','melanin','hemoglobin'],
+ ['The metallic element liquid at typical room temperature is ___.','mercury','copper','aluminum','silver'],
+ ['The chemical symbol Au belongs to ___.','gold','silver','argon','aluminum'],
+ ['The chemical symbol Fe belongs to ___.','iron','fluorine','francium','fermium'],
+ ['The gas that makes up most of Earth’s atmosphere is ___.','nitrogen','oxygen','carbon dioxide','hydrogen'],
+ ['The planet whose rotation takes longer than its year is ___.','Venus','Mars','Jupiter','Neptune'],
+ ['The hottest planet in our solar system is ___. Mercury would like a recount.','Venus','Mercury','Mars','Jupiter'],
+ ['The solar-system planet famous for the Great Red Spot is ___.','Jupiter','Saturn','Neptune','Uranus'],
+ ['The largest moon of Saturn is ___.','Titan','Europa','Ganymede','Triton'],
+ ['The largest moon in the solar system is ___.','Ganymede','Titan','Europa','Callisto'],
+ ['The first person to walk on the Moon was ___.','Neil Armstrong','Buzz Aldrin','Yuri Gagarin','Michael Collins'],
+ ['The first human in space was ___.','Yuri Gagarin','Alan Shepard','Neil Armstrong','John Glenn'],
+ ['The Sun is predominantly made of ___.','hydrogen','helium','oxygen','carbon'],
+ ['The galaxy containing our solar system is the ___.','Milky Way','Andromeda','Triangulum','Whirlpool'],
+ ['Light travels fastest through a ___.','vacuum','diamond','glass','pool of water'],
+ ['A triangle’s interior angles total ___ degrees in ordinary flat geometry.','180','90','270','360'],
+ ['A polygon with eight sides is an ___.','octagon','hexagon','heptagon','nonagon'],
+ ['The Roman numeral L represents ___.','50','100','500','1000'],
+ ['The number zero cannot be a legal ___ in ordinary arithmetic.','divisor','addend','numerator','factor'],
+ ['The first prime number is ___. Very small, very important.','2','1','0','3'],
+ ['The shortest month by number of days is ___.','February','April','June','November'],
+ ['The largest ocean is the ___ Ocean.','Pacific','Atlantic','Indian','Arctic'],
+ ['The capital of Australia is ___. Sydney is not taking this well.','Canberra','Sydney','Melbourne','Perth'],
+ ['The capital of Canada is ___.','Ottawa','Toronto','Montreal','Vancouver'],
+ ['The capital of Brazil is ___.','Brasília','Rio de Janeiro','São Paulo','Salvador'],
+ ['The capital of Türkiye is ___.','Ankara','Istanbul','Izmir','Antalya'],
+ ['The capital of Morocco is ___.','Rabat','Casablanca','Marrakesh','Tangier'],
+ ['The city historically known as Constantinople is now ___.','Istanbul','Athens','Ankara','Rome'],
+ ['The country whose flag features a maple leaf is ___.','Canada','Australia','Switzerland','Austria'],
+ ['The country containing Machu Picchu is ___.','Peru','Mexico','Chile','Bolivia'],
+ ['The country containing the ancient city of Petra is ___.','Jordan','Egypt','Türkiye','Greece'],
+ ['The river that flows through Paris is the ___.','Seine','Thames','Danube','Rhine'],
+ ['The river that flows through London is the ___.','Thames','Seine','Rhine','Tiber'],
+ ['The Great Barrier Reef is off the coast of ___.','Australia','South Africa','Brazil','Japan'],
+ ['The country containing Mount Fuji is ___.','Japan','China','South Korea','Nepal'],
+ ['The canal connecting the Atlantic and Pacific oceans crosses ___.','Panama','Egypt','Mexico','Colombia'],
+ ['The sea separating Europe and northern Africa is the ___.','Mediterranean','Caribbean','Baltic','Bering'],
+ ['The largest hot desert is the ___.','Sahara','Gobi','Kalahari','Atacama'],
+ ['The language with the word bonjour for hello is ___.','French','Italian','Portuguese','German'],
+ ['The language with the word gracias for thank you is ___.','Spanish','French','German','Japanese'],
+ ['The board game with a king that must avoid checkmate is ___.','chess','checkers','Go','backgammon'],
+ ['A standard chessboard has ___ squares.','64','72','81','100'],
+ ['A standard deck without jokers contains ___ cards.','52','48','54','60'],
+ ['The suit represented by a black three-leaf shape is ___.','clubs','spades','hearts','diamonds'],
+ ['The sport featuring a shuttlecock is ___.','badminton','squash','table tennis','lacrosse'],
+ ['The sport with the scoring terms love and deuce is ___.','tennis','golf','cricket','volleyball'],
+ ['In basketball, a free throw is worth ___ point.','one','two','three','four'],
+ ['A marathon’s official distance is ___ kilometers.','42.195','40','45','50'],
+ ['The Beatles’ drummer was ___.','Ringo Starr','George Harrison','Paul McCartney','John Lennon'],
+ ['The musician commonly nicknamed the King of Pop was ___.','Michael Jackson','Elvis Presley','Prince','Freddie Mercury'],
+ ['The band that released Bohemian Rhapsody was ___.','Queen','ABBA','The Beatles','Pink Floyd'],
+ ['The composer of The Four Seasons was ___.','Antonio Vivaldi','Wolfgang Mozart','Johann Bach','Ludwig Beethoven'],
+ ['The instrument with black and white keys and hammers striking strings is the ___.','piano','organ','accordion','harpsichord'],
+ ['The standard violin has ___ strings.','four','five','six','eight'],
+ ['The standard guitar has ___ strings.','six','four','five','seven'],
+ ['The author of Frankenstein was ___.','Mary Shelley','Bram Stoker','Jane Austen','Emily Brontë'],
+ ['The author of Dracula was ___.','Bram Stoker','Mary Shelley','Oscar Wilde','H. G. Wells'],
+ ['The author of Pride and Prejudice was ___.','Jane Austen','Emily Brontë','Virginia Woolf','Mary Shelley'],
+ ['The author of The Hobbit was ___.','J. R. R. Tolkien','C. S. Lewis','Lewis Carroll','Terry Pratchett'],
+ ['The author of Alice’s Adventures in Wonderland was ___.','Lewis Carroll','J. M. Barrie','Roald Dahl','Charles Dickens'],
+ ['The author of The Hitchhiker’s Guide to the Galaxy was ___.','Douglas Adams','Terry Pratchett','Isaac Asimov','Arthur C. Clarke'],
+ ['The author of The Lion, the Witch and the Wardrobe was ___.','C. S. Lewis','J. R. R. Tolkien','Lewis Carroll','Philip Pullman'],
+ ['The painter of The Starry Night was ___.','Vincent van Gogh','Claude Monet','Pablo Picasso','Salvador Dalí'],
+ ['The painter of the Mona Lisa was ___.','Leonardo da Vinci','Michelangelo','Raphael','Donatello'],
+ ['The painter famous for melting clocks in The Persistence of Memory was ___.','Salvador Dalí','Pablo Picasso','Claude Monet','Henri Matisse'],
+ ['The Greek god associated with the sea is ___.','Poseidon','Zeus','Hermes','Apollo'],
+ ['The Greek goddess associated with wisdom is ___.','Athena','Aphrodite','Artemis','Hera'],
+ ['The Norse god known for a hammer named Mjölnir is ___.','Thor','Loki','Odin','Baldur'],
+ ['The Hogwarts house represented by a lion is ___.','Gryffindor','Slytherin','Ravenclaw','Hufflepuff'],
+ ['The Hogwarts house represented by a badger is ___.','Hufflepuff','Ravenclaw','Slytherin','Gryffindor'],
+ ['The fictional detective who lives at 221B Baker Street is ___.','Sherlock Holmes','Hercule Poirot','Miss Marple','Nancy Drew'],
+ ['The superhero whose civilian identity is Peter Parker is ___.','Spider-Man','Batman','Superman','The Flash'],
+ ['The superhero whose civilian identity is Bruce Wayne is ___.','Batman','Superman','Iron Man','Green Arrow'],
+ ['The superhero whose civilian identity is Tony Stark is ___.','Iron Man','Batman','Ant-Man','Doctor Strange'],
+ ['The video game plumber typically dressed in red is ___.','Mario','Luigi','Wario','Toad'],
+ ['The hero of The Legend of Zelda is usually named ___.','Link','Zelda','Ganon','Epona'],
+ ['The yellow Pokémon associated with electric attacks is ___.','Pikachu','Charmander','Squirtle','Bulbasaur'],
+ ['The green ogre who famously lives in a swamp is ___.','Shrek','Fiona','Donkey','Puss in Boots'],
+ ['The animated fish who gets separated from his dad in Finding Nemo is ___.','Nemo','Dory','Marlin','Gill'],
+ ['The Pixar film about a rat who loves cooking is ___.','Ratatouille','Brave','Coco','Luca'],
+ ['The fictional country in Black Panther is ___.','Wakanda','Genovia','Latveria','Sokovia'],
+ ['The Star Wars weapon associated with Jedi is a ___.','lightsaber','phaser','sonic screwdriver','portal gun'],
+ ['The Doctor Who device used to travel through time is the ___.','TARDIS','DeLorean','Enterprise','Millennium Falcon'],
+ ['The vehicle used for time travel in Back to the Future is a ___.','DeLorean','Mustang','Camaro','Volkswagen Beetle'],
+ ['The food ingredient that makes traditional pesto green is ___.','basil','parsley','spinach','mint'],
+ ['The main ingredient in traditional hummus is ___.','chickpeas','lentils','potatoes','white beans'],
+ ['The main ingredient in guacamole is ___.','avocado','tomato','cucumber','zucchini'],
+ ['The spice obtained from a flower’s stigmas is ___.','saffron','cinnamon','turmeric','nutmeg'],
+ ['The spice made from tree bark is ___.','cinnamon','pepper','cumin','cloves'],
+ ['The cheese traditionally associated with a Greek salad is ___.','feta','cheddar','brie','gouda'],
+ ['The Italian word for cooked cream gives its name to ___.','panna cotta','tiramisu','gelato','cannoli'],
+ ['The French pastry whose name means crescent is a ___.','croissant','éclair','macaron','madeleine'],
+ ['The red fruit with seed-like achenes on its outer surface is the ___.','strawberry','grape','peach','apple'],
+ ['A botanist classifies a tomato as a ___.','fruit','root','stem','leaf'],
+ ['The process by which plants use sunlight to make sugars is ___.','photosynthesis','respiration','fermentation','osmosis'],
+ ['The human body’s largest organ is the ___.','skin','liver','brain','lung'],
+ ['The cells that carry most oxygen around your body are ___ blood cells.','red','white','blue','yellow'],
+ ['The unit used to measure electrical resistance is the ___.','ohm','watt','volt','ampere'],
+ ['The unit used to measure frequency is the ___.','hertz','joule','newton','pascal'],
+ ['The computer abbreviation CPU ends with the word ___.','unit','utility','user','upload'],
+ ['The computer abbreviation HTML ends with the word ___.','language','link','layout','library'],
+ ['The punctuation mark in the middle of an email address is an ___.','at sign','ampersand','asterisk','underscore'],
+ ['The binary number 101 represents ___ in decimal.','5','3','4','6'],
+ ['The number of bits in a byte is ___.','8','4','10','16'],
+ ['The prefix kilo typically means ___.','one thousand','one hundred','one million','one billion'],
+ ];
+ $out=[];foreach($rows as $i=>$r)$out[]=['key'=>'fact:'.$i,'question'=>$r[0],'truth'=>$r[1],'fakes'=>array_slice($r,2),'explanation'=>str_replace('___',$r[1],$r[0])];return $out;
+}
+function party_jb_quizzes(): array {
+ $out=party_jb_facts();
+ // Generated mental-math questions vary the trivia sessions.
+ for($a=3;$a<=25;$a++)for($b=2;$b<=12;$b++){
+  $n=$a*$b;$out[]=['key'=>"math:$a:$b",'question'=>"Your $a imaginary employees each demand $b snacks. How many snacks does this very real problem require?",'truth'=>(string)$n,'fakes'=>[(string)($n+$a),(string)($n-$b),(string)($a+$b)],'explanation'=>"$a × $b = $n."];
+ }
+ for($a=12;$a<=60;$a++)for($b=2;$b<=8;$b++){$n=$a+$b*3;$out[]=['key'=>"order:$a:$b",'question'=>"Your calculator has trust issues. What is $a + $b × 3?",'truth'=>(string)$n,'fakes'=>[(string)(($a+$b)*3),(string)($a+$b+3),(string)($a*$b+3)],'explanation'=>'Multiplication happens before addition.'];}
+ foreach($out as &$q){$q['fakes']=array_values(array_unique(array_filter($q['fakes'],fn($v)=>$v!==$q['truth'])));for($offset=1;count($q['fakes'])<3;$offset++){$fake=(string)((int)$q['truth']+$offset);if(!in_array($fake,$q['fakes'],true)&&$fake!==$q['truth'])$q['fakes'][]=$fake;}}unset($q);
+ return $out;
+}
+function party_jb_comedy(): array {
+ $people=['a ghost','a pirate','a vampire','a dragon','a robot','a wizard','a time traveler','an alien','a detective','a royal pigeon','a nervous superhero','a very tired mermaid','a retired villain','a talking potato','a tax accountant','a dramatic squirrel','a haunted toaster','a pet rock','a tiny CEO','a fortune teller','a sentient elevator','a bored astronaut','a werewolf','a karaoke champion','a professional napper','a suspicious garden gnome','a goblin influencer','a telepathic toddler','a talking traffic cone','a zombie librarian','a medieval knight','a competitive grandma','a lost tourist','a sentient umbrella','a disco skeleton','a retired magician','a grumpy unicorn','a raccoon chef','a motivational snail','an undercover duck'];
+ $places=['a wedding','a job interview','a first date','a school assembly','a family reunion','a cooking show','a funeral','the gym','a board meeting','a museum','a talent show','a reality show','an airport','a space station','a group chat','a supermarket','a science fair','a hotel lobby','a birthday party','a courtroom'];
+ $templates=['The worst thing %s could say at %s.','The name of a terrible self-help book written by %s after %s.','The excuse %s gives for being late to %s.','The item %s should absolutely not bring to %s.','The title of a documentary about %s ruining %s.','The secret password %s uses to enter %s.','The slogan for a company run by %s that caters to %s.','The first rule if %s takes charge of %s.','The text %s accidentally sends during %s.','The apology %s posts after getting banned from %s.','The warning on a product invented by %s for %s.','The unexpected award %s wins at %s.'];
+ $out=[];foreach($people as $i=>$person)foreach($places as $j=>$place)foreach($templates as $k=>$template)$out[]=['key'=>"quip:$i:$j:$k",'text'=>sprintf($template,$person,$place)];return $out;
+}
+function party_jb_draw_prompts(): array {
+ $subjects=['a cat','a potato','a robot','a vampire','a dinosaur','a cactus','a toaster','a penguin','a wizard','a snail','a ghost','a raccoon','a banana','a dragon','a duck','a mushroom','an octopus','a skeleton','a gnome','a cloud','a mermaid','a crocodile','a superhero','an astronaut','a pigeon','a teapot','a frog','a unicorn','a crab','a tiny king'];
+ $actions=['running for mayor','taking a selfie','winning a dance battle','failing a job interview','opening a bakery','stealing a spaceship','playing tennis','having an identity crisis','doing taxes','teaching yoga','going on a first date','getting a haircut','learning to fly','hosting a talk show','performing surgery','inventing shoes','on a treasure hunt','taking an exam','serving soup','building a snowman'];
+ $details=['on the moon','in tiny sunglasses','during a thunderstorm','in a very fancy hat','underwater','while juggling','at a birthday party','inside a snow globe','with a giant spoon','on roller skates'];
+ $out=[];foreach($subjects as $i=>$s)foreach($actions as $j=>$a)foreach($details as $k=>$d)$out[]=['key'=>"draw:$i:$j:$k",'text'=>"$s $a $d"];return $out;
+}

@@ -1,5 +1,5 @@
-import {$,setupParty,perform,lobbyContent,roomControls,playerName,notice} from '../../shared/party-ui.js?v=20261008-refine-1';
-import {el,button,scores} from '../../shared/game-tools.js?v=20261008-refine-1';
+import {$,setupParty,perform,lobbyContent,roomControls,playerName,notice} from '../../shared/party-ui.js?v=20261009-party-1';
+import {el,button,scores} from '../../shared/game-tools.js?v=20261009-party-1';
 let latest,client,key='',saveTimer,clockOffset=0;
 const labels={unique:'+1 unique',duplicate:'0 duplicate',letter:'0 wrong letter',blank:'0 blank',rejected:'0 rejected'};
 function answers(){return [...$('game-stage').querySelectorAll('.answer-field input')].map(input=>input.value);}
